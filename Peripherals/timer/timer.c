@@ -1,13 +1,11 @@
-
-#include "stm32l1xx.h"
-#include "stm32l1xx_tim.h"
-#include "stm32l1xx_rcc.h"
+#include "timer.h"
+#include "stm32F10x.h"
+#include "stm32F10x_tim.h"
+#include "stm32F10x_rcc.h"
 
 #include "main.h"
 
-#include "peripherals\timer\timer.h"
-//#include "peripherals\dma\dma.h"
-#include "cmsis_lib\include\misc.h"
+#include "..\StdPeriph_Driver\inc\misc.h"
 
 void Timer_Handler(void);
 void TimerLowSpeed_Handler(void);
@@ -18,28 +16,23 @@ signed int Timer_ms[eNumberOfTimers];          // 1ms
 signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
 unsigned int TimerCS;
 
-/*--- WYKORZYSTANIE TIMER�W -----------------------------------------------------
-
-  TIM2  - Odmierzanie 1ms
-  TIM7  - Odmierzanie 100ms
-
-  TIM4  - Do wyzwalania (TRIGGER) ADC; 
-
+//--- WYKORZYSTANIE TIMER�W -----------------------------------------------------
+//
+//  TIM2  - Odmierzanie 1ms
+//  TIM7  - Odmierzanie 100ms
+//
+//  TIM4  - Do wyzwalania (TRIGGER) ADC;
+//
 //  TIM3  - PWM CH1 pin PC6 do generowania SYGNALOW porozumiewawczych
 //  TIM5  - PWM Odmierzanie 2ms
-  
-  TIM9  - TR1 Timer do transmisji oraz Timeout-Synchronizacja
-
-  TIM10 - TR2 Timeout-Synchronizacja
-  TIM11 - TR2 Timer do transmisji
-  
+//
+//  TIM9  - TR1 Timer do transmisji oraz Timeout-Synchronizacja
+//
+//  TIM10 - TR2 Timeout-Synchronizacja
+//  TIM11 - TR2 Timer do transmisji
+//
 //  TIM6  - Transmisja z AKU
-
--------------------------------------------------------------------------------*/
-
-/*-----------------------------------------------------------------------------*/
-struct sFrequency_Counter Frequency_Counter;
-
+//-----------------------------------------------------------------------------
 
 /** 
  *  \brief Init Timer 1ms
@@ -93,15 +86,15 @@ void Init_LowSpeedTimer(void) // Timer ms
   unsigned char i;
 
   NVIC_InitTypeDef NVICC;
-  NVICC.NVIC_IRQChannel = TIM7_IRQn;
+  NVICC.NVIC_IRQChannel = TIM3_IRQn;
   NVICC.NVIC_IRQChannelPreemptionPriority = 8;
   NVICC.NVIC_IRQChannelSubPriority = 0;
   NVICC.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVICC);
 
-  NVIC_ClearPendingIRQ(TIM7_IRQn);
-  NVIC_EnableIRQ(TIM7_IRQn);
-  SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM7EN);
+  NVIC_ClearPendingIRQ(TIM3_IRQn);
+  NVIC_EnableIRQ(TIM3_IRQn);
+  SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM3EN);
   
   WRITE_REG(TIM7->CNT, 0x0000);
   WRITE_REG(TIM7->ARR, 0x3200); //  100ms -> 0x2E18
@@ -125,15 +118,11 @@ void Init_LowSpeedTimer(void) // Timer ms
 void Timer_Handler(void)
 {  
 	if(Timer_ms[eTimer_Test] > 0)					Timer_ms[eTimer_Test]--;
-	if(Timer_ms[eTimer_PTC_Check] > 0)				Timer_ms[eTimer_PTC_Check]--;
-	if(Timer_ms[eTimer_PTC_Delay] > 0)				Timer_ms[eTimer_PTC_Delay]--;
 	if(Timer_ms[eTimer_Setup] > 0)					Timer_ms[eTimer_Setup]--;
-	if(Timer_ms[eTimer_TimeDelayOnCheck] > 0)		Timer_ms[eTimer_TimeDelayOnCheck]--;
 	if(Timer_ms[eTimer_Potentiometer_Check] > 0)	Timer_ms[eTimer_Potentiometer_Check]--;
 	if(Timer_ms[eTimer_Adc] > 0)					Timer_ms[eTimer_Adc]--;
 	if(Timer_ms[eTimer_InterruptConnection]> 0)		Timer_ms[eTimer_InterruptConnection]--;
 	if(Timer_ms[eTimer_AppsTick] > 0)				Timer_ms[eTimer_AppsTick]--;
-	if(Timer_ms[eTimer_ShortCircuit_Check] > 0)		Timer_ms[eTimer_ShortCircuit_Check]--;
 
 	if(TimerCS < 0xFFFFFFFF) TimerCS++;
 }
@@ -251,7 +240,7 @@ void TIM7_IRQHandler(void) // timer 100ms
 //  TIM5->CNT = 0;
   
   CLEAR_BIT(TIM7->SR, TIM_SR_UIF);
-  NVIC_ClearPendingIRQ(TIM7_IRQn);
+  NVIC_ClearPendingIRQ(TIM3_IRQn);
 }
 
 /**

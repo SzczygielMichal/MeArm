@@ -1,82 +1,49 @@
-
-
 #ifndef TIMER_H_
   #define TIMER_H_
-
-
 /* Exported constants --------------------------------------------------------*/
-
 
   #define TIMER_OFF   -1
   #define TIMER_END   0
   #define TIMER_BUSY  1
 
-
-
-#define DELAY_CONNECTION_AFTER_R_READY  100
-
-
-
 /* Exported types ------------------------------------------------------------*/
-enum eTimer
+enum eTimer		// Timer 1ms
 {
-	eTimer_Test,
-	eTimer_PTC_Check,
-	eTimer_PTC_Delay,
-	eTimer_TimeDelayOnCheck,
-	eTimer_ShortCircuit_Check,
-	eTimer_Setup,
-	eTimer_Potentiometer_Check,
+	eTimer_LED,
 	eTimer_Adc,
+	eTimer_Key,
+	eTimer_Setup,
+	eTimer_Test	,
+	eTimer_Potentiometer_Check,
 	eTimer_InterruptConnection,
 	eTimer_AppsTick,
 	/*-----------------------------*/
 	eNumberOfTimers
 };
 
-struct sFrequency_Counter
-{
-  unsigned int ChannelPositive;
-  unsigned int ChannelNegative;
-  unsigned char PositiveOverflow;
-  unsigned char NegativeOverflow;
-};
-
-
-enum eTimerLowSpeed
+enum eTimerLowSpeed		// Timer 100ms
 {
 	eTimerLowSpeed_StartUp,
 	eTimerLowSpeed_Test,
 	eTimerLowSpeed_Led,
 	eTimerLowSpeed_Reset,
 	eTimerLowSpeed_TimeDelayOn,
-
 	/*-----------------------------*/
 	eNumberOfLowSpeedTimers
 };
 
-enum eTimerFastSpeed
+enum eTimerFastSpeed		// Timer 100us
 {
   eTimerUS_Adc,
   eTimerUS_Dac,
-
 /*-----------------------------*/
-  eNumberOfUSTimers,
+  eNumberOfUSTimers
 };
-
 
 /* Exported variable ---------------------------------------------------------*/
 extern signed int Timer_us[eNumberOfUSTimers];        // 100us
 extern signed int Timer_ms[eNumberOfTimers];          // 1ms
 extern signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
-
-extern unsigned int TimerCS;
-extern struct sFrequency_Counter Frequency_Counter;
-
-
-/* Exported functions ------------------------------------------------------- */
-
-
 
 /* Exported functions ------------------------------------------------------- */
 #define TimerUStart(TimerNr, Time)     Timer_us[TimerNr] = Time
@@ -99,18 +66,6 @@ extern struct sFrequency_Counter Frequency_Counter;
 #define TimerLowSpeedStatus(TimerNr)        Timer_ls[TimerNr]
 #define TimerLowSpeedRead(TimerNr)          Timer_ls[TimerNr]
 
-
-#define TimerCSignalStart() TimerCS = 0
-#define TimerCSignalStop()  TimerCS = 0xFFFFFFFF
-#define TimerCSignalRead()  TimerCS
-
-
-enum eEltelnetTimerType
-{
-  eEltelnetTimerType_Response, //  44us
-  eEltelnetTimerType_Synchro,  // 249us
-};
-
 /* Private function prototypes -----------------------------------------------*/
 
 void TIM_Config(void);
@@ -120,4 +75,3 @@ void Init_LowSpeedTimer(void);
 void Init_FastSpeedTimer(void);
 
 #endif
-

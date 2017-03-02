@@ -1,6 +1,6 @@
 #include "board.h"
-#include "peripherals\timer\timer.h"
-#include "stm32l1xx.h"  /// NVIC_SystemReset
+#include "stm32F10x.h"  /// NVIC_SystemReset
+#include "../peripherals/timer/timer.h"
   
 
   unsigned int Build;

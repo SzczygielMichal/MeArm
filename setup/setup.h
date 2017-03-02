@@ -12,7 +12,7 @@
   #define SETUP_H_
 
 #include "main.h"
-#include "board\board.h"       // Date 04.12.2014
+#include "..\board\board.h"       // Date 04.12.2014
 #include "dbg_ctrl.h"
 
 enum _Current_Transformer_TypeE
@@ -89,13 +89,13 @@ struct _setupS
 } __attribute__((packed));
 
 
-struct _pk_elS
+struct _sMeArm
 {
 	struct _setupS Setup;
 	struct _statusS statusS;
 };
 
-extern struct _pk_elS pk_elS;
+extern struct _sMeArm sMeArm;
 
 #endif
 

@@ -2,9 +2,9 @@
 //                   pwm.c
 //---------------------------------------------------
 
-#include "stm32l1xx.h"
+#include "stm32f10x.h"
 
-#include "app\signal\signal.h"
+#include "..\app\signal\signal.h"
 
 
 void TIM5_IRQHandler(void) // timer 2ms
@@ -43,7 +43,7 @@ void TIM5_IRQHandler(void) // timer 2ms
   }
   
   CLEAR_BIT(TIM5->SR, TIM_SR_UIF);
-  NVIC_ClearPendingIRQ(TIM5_IRQn);
+  NVIC_ClearPendingIRQ(TIM4_IRQn);
 }
 
 // generowanie sygnalu
@@ -58,7 +58,7 @@ void Init_PWM_TIM3(void)
 
   /**
    * PWM mode 1 - In upcounting, channel 1 is active as long as TIMx_CNT<TIMx_CCR1
-   * else inactive. In downcounting, channel 1 is inactive (OC1REF=‘0) as long as
+   * else inactive. In downcounting, channel 1 is inactive (OC1REF=â€�0) as long as
    * TIMx_CNT>TIMx_CCR1 else active (OC1REF=1).
    */
   MODIFY_REG(TIM3->CCMR1, TIM_CCMR1_OC1M, TIM_CCMR1_OC1M_1 | TIM_CCMR1_OC1M_2);
@@ -75,10 +75,10 @@ void Init_PWM_TIM3(void)
 
 void Init_TIM5(void)
 {
-  NVIC_ClearPendingIRQ(TIM5_IRQn);
-  NVIC_EnableIRQ(TIM5_IRQn);
+  NVIC_ClearPendingIRQ(TIM4_IRQn);
+  NVIC_EnableIRQ(TIM4_IRQn);
    
-  SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM5EN);
+  SET_BIT(RCC->APB1ENR, RCC_APB1ENR_TIM4EN);
   
   WRITE_REG(TIM5->CNT, 0x0000);
   WRITE_REG(TIM5->ARR, 0x4CCE);

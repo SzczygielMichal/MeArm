@@ -5,11 +5,10 @@
 /**
  * \brief Platforma sprzêtowa - uzale¿niona od wyboru pliku nag³ówkowego.
  */
-  #include "board\board_v_04_12_2014.h" /// p³ytka w wersji 04.12.2014
+  #include "..\board\board_v_26_02_2017.h"
 
-
-  #define PRODUCENT_INFO  "Eltel Sp.z o.o. 40-312 Katowice  ul.Milowicka 1E tel.(032)202-78-86"
-  #define PRODUCENT_INFO_SHORT  "Eltel Sp.z o.o. 40-312 Katowice  ul.Milowicka 1E"
+  #define PRODUCENT_INFO  "Micha³ Szczygie³ - Ruda sl¹ska"
+  #define PRODUCENT_INFO_SHORT  "Micha³ Szczygie³"
   
   #define ON  1
   #define OFF 0

@@ -1,7 +1,7 @@
 
 
 //  #include "main.h"
-#include "stm32l1xx_iwdg.h"
+#include "stm32f10x_iwdg.h"
 void Init_IWDG(void);
 void IWDG_Reset(void);
 

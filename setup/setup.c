@@ -4,24 +4,23 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <ctl_api.h>
-
-#include "stm32l1xx.h"
-#include "setup\setup.h"
+#include "stm32f10x.h"
+#include "..\setup\setup.h"
 #include "core_cm3.h"
 //#include "lib\stm32l1xx_flash.h"
 
 //unsigned char SaveSetupFlag;
 //unsigned char LoadSetupFlag;
 
-  /* Private variables ---------------------------------------------------------*/
-  __IO FLASH_Status FLASHStatus = FLASH_COMPLETE;
+/* Private variables ---------------------------------------------------------*/
+//  __IO FLASH_Status FLASHStatus = FLASH_COMPLETE;
 
 
-struct sSetupControl SetupControl;
-struct sSetup Setup;
+// struct sSetupControl SetupControl;
+// struct sSetup Setup;
 
-/*--- FUNKCJE PRYWATNE ---------------------------------------------------------------*/
+/*
+--- FUNKCJE PRYWATNE ---------------------------------------------------------------
 void DefaultSettings(void)
 {
   if( *(unsigned int *)(DATA_EEPROM_START_ADDR) != 0x4B49 )
@@ -98,6 +97,7 @@ void LoadSetupStruct(void)
 //#define SRC_ADDR 0x08080000
 //
 //memcpy(&dest, (void *) SRC_ADDR, sizeof(dest));
+*/
 
 
 /*--------------------------------------------------------------------------------------------*/

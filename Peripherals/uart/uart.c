@@ -1,12 +1,13 @@
 
+#include "uart.h"
+
 #include "main.h"
-#include "stm32l1xx.h"
+#include "stm32f10x.h"
 #include "board.h"    // Date 04.12.2014
 //#include "peripherals\dma\dma.h"
-#include "peripherals\uart\uart.h"
-#include "peripherals\timer\timer.h"
-#include "app\debug\debug.h"
-#include "cmsis_lib\include\misc.h"
+#include "..\app\debug\debug.h"
+#include "..\StdPeriph_Driver\inc\misc.h"
+#include "../timer/timer.h"
 
 struct specialUART  sUART1;
 

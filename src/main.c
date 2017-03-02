@@ -8,7 +8,8 @@
   ******************************************************************************
 */
 
-
+#include <board.h>
+#include <init.h>
 #include "stm32f10x.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -23,29 +24,23 @@
 #include "stm32f10x_usart.h"
 #include "stm32f10x_adc.h"
 #include "stm32f10x_dac.h"
-//#include "board\init.h"
-//#include "board\board.h"
-//#include "setup\setup.h"
-//#include "app\debug\debug.h"
-//#include "app\led\led.h"
-//#include "app\PTC\PTC.h"
+#include "..\setup\setup.h"
+#include "..\app\debug\debug.h"
+#include "..\app\led\led.h"
 //#include "app\version\version.h"
-//#include "app\TimeDelayOn\TimeDelayOn.h"
-//#include "app\potentiometer\potentiometer.h"
-//#include "app\Short_Circuit_Blockade\Short_Circuit_Blockade.h"
-//#include "peripherals\iwdg\iwdg.h"
-//#include "peripherals\timer\timer.h"
-//#include "peripherals\ADC\ADC.h"
-//#include "peripherals\DAC\DAC.h"
-//#include "peripherals\uart\uart.h"
-//#include "dbg_ctrl.h"
+#include "..\app\potentiometer\potentiometer.h"
+#include "dbg_ctrl.h"
 #include "main.h"
+#include "../peripherals/iwdg/iwdg.h"
+#include "../peripherals/timer/timer.h"
+#include "../peripherals/uart/uart.h"
 
 char buffer[100];
 unsigned char x;
 char op;
 unsigned int we;
 unsigned char wynik;
+struct _sMeArm sMeArm;
 
 int main(void)
 {
@@ -55,10 +50,10 @@ int main(void)
 	op = 0;
 	setvbuf(stdout, NULL, _IONBF, 0); // Wy��czenie buforowania  tekstu drukowanego przez printf
 
-//	StartUpReason();
+	StartUpReason();
 
-//	Init_RCC();
-//	Init_IO();
+	Init_RCC();
+	Init_IO();
 //	Init_Peripherals();
 //	Init_ADC();
 //	Init_Setup();
@@ -77,7 +72,7 @@ int main(void)
 //	Init_Debug();
 //	Init_IWDG();
 
-	Debug_Intro();
+//	Debug_Intro();
 
 	while(1)
 	{
@@ -93,18 +88,18 @@ int main(void)
 	return 0;
 }
 
-void Debug_Intro (void)
-{
-	printf("\033[2J");    // Czyszczenie ekranu
-	printf("\033[00f");  // Ustawienie kursora
-	printf("********************************************************************\n\r");
-	printf("********                  Eltel Sp. z o.o.                  ********\n\r");
-	printf("********          Katowice 40-312 ul.Milowicka 1E           ********\n\r");
-	printf("********             www.eltel.katowice.pl                  ********\n\r");
-	printf("********                  tel. 32-202-78-86                 ********\n\r");
-	printf("********************************************************************\n\r");
-	printf("********             \033[33mPrzekaźnik elektroniczny\033[39m               ********\n\r");
-	printf("********************************************************************\n\r");
+//void Debug_Intro (void)
+//{
+//	printf("\033[2J");    // Czyszczenie ekranu
+//	printf("\033[00f");  // Ustawienie kursora
+//	printf("********************************************************************\n\r");
+//	printf("********                  Eltel Sp. z o.o.                  ********\n\r");
+//	printf("********          Katowice 40-312 ul.Milowicka 1E           ********\n\r");
+//	printf("********             www.eltel.katowice.pl                  ********\n\r");
+//	printf("********                  tel. 32-202-78-86                 ********\n\r");
+//	printf("********************************************************************\n\r");
+//	printf("********             \033[33mPrzekaźnik elektroniczny\033[39m               ********\n\r");
+//	printf("********************************************************************\n\r");
 //	printf("********        Data kompilacji:      %14s        ********\n\r", DATE_NOW);
 //	printf("********        Godzina kompilacji:   %14s        ********\n\r", TIME_NOW);
 //	printf("********        Data rewizji:         %14s        ********\n\r", DATE_REV);
@@ -112,4 +107,4 @@ void Debug_Intro (void)
 //	printf("********        Rewizja:              %14d        ********\n\r", REVISION);
 //	printf("********        Wersja Pcb:           %14s        ********\n\r", BOARDREV);
 //	printf("********************************************************************\n\r");
-}
+//}

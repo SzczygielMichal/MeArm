@@ -52,294 +52,163 @@
 #include <stdio.h>
 #include "main.h"
 #include "init.h"
-#include "board\init.h"
-#include "stm32l1xx.h"
-#include "stm32l1xx_gpio.h"
-#include "setup\setup.h"
-#include "cmsis_lib\include\misc.h"
-#include "cmsis_lib\include\stm32l1xx_adc.h"
-#include "peripherals\UART\UART.h"
-#include "peripherals\timer\timer.h"
+#include "..\board\init.h"
+#include "..\board\board_v_26_02_2017.h"
+#include "stm32f10x.h"
+#include "stm32f10x_gpio.h"
+#include "..\setup\setup.h"
+#include "..\StdPeriph_Driver\inc\misc.h"
+#include "..\StdPeriph_Driver\inc\stm32f10x_adc.h"
 #include "dbg_ctrl.h"
+#include "../peripherals/timer/timer.h"
+#include "../peripherals/uart/uart.h"
 
 unsigned int i_nom, mull;
-unsigned int short_circuit_current;
-
-const unsigned int nominalCcurrentTable[19][2] =
-{                      
-		{0x0400,	0x03E3},		// wartosć krańcowa - 0x03FF, - wartość nie osiągalna przez przetwornik ADC ADCMAX = 0x03FF,
-		{0x03E3,	0x03AA},		// wartosć krańcowa - 0x03D3,
-		{0x03AA,	0x0371},		// wartosć krańcowa - 0x039B,
-		{0x0371,	0x0338},		// wartosć krańcowa - 0x0361,
-		{0x0338,	0x02FF},		// wartosć krańcowa - 0x031A,
-		{0x02FF,	0x02C6},		// wartosć krańcowa - 0x02E6,
-		{0x02C6,	0x028D},		// wartosć krańcowa - 0x02A9,
-		{0x028D,	0x0254},		// wartosć krańcowa - 0x0271,
-		{0x0254,	0x021C},		// wartosć krańcowa - 0x023C,
-		{0x021C,	0x01E3},		// wartosć krańcowa - 0x0203,
-		{0x01E3,	0x01AA},		// wartosć krańcowa - 0x01CD,
-		{0x01AA,	0x0171},		// wartosć krańcowa - 0x019E,
-		{0x0171,	0x0138},		// wartosć krańcowa - 0x0165,
-		{0x0138,	0x00FF},		// wartosć krańcowa - 0x012C,
-		{0x00FF,	0x00C6},		// wartosć krańcowa - 0x00E4,
-		{0x00C6,	0x008D},		// wartosć krańcowa - 0x00A1,
-		{0x008D,	0x0054},		// wartosć krańcowa - 0x005F,
-		{0x0054,	0x001C},		// wartosć krańcowa - 0x0025,
-		{0x001C,	0x0000}			// wartosć krańcowa - 0x0000
-};
-
-const unsigned int shortCircuitCurrentTable[10][2] =
-{
-		{0x0400,	0x03c7},		// wartosć krańcowa - 0x0400 - wartość nie osiągalna przez przetwornik ADC ADCMAX = 0x03FF,
-		{0x03c7,	0x0355},		// wartosć srodkowa - 0x038E
-		{0x0355,	0x02e3},		// wartosć srodkowa - 0x031C
-		{0x02e3,	0x0271},		// wartosć srodkowa - 0x02AA
-		{0x0271,	0x0200},		// wartosć srodkowa - 0x0238
-		{0x0200,	0x018e},		// wartosć srodkowa - 0x01C7
-		{0x018e,	0x011c},		// wartosć srodkowa - 0x0155
-		{0x011c,	0x00aa},		// wartosć srodkowa - 0x00E3
-		{0x00aa,	0x0039},		// wartosć srodkowa - 0x0071
-		{0x0039,	0x0000}			// wartosć krańcowa - 0x0000
-};
-
-const unsigned int delayTimeOnTable[11][2] =
-{
-		{0x0400,	0x03CC},		//	wartosć krańcowa - 0x0400 - wartość nie osiągalna przez przetwornik ADC ADCMAX = 0x03FF,
-		{0x03CC,	0x0366},		//	wartosć srodkowa - 0x0386
-		{0x0366,	0x02FF},		//	wartosć srodkowa - 0x031C
-		{0x02FF,	0x0299},		//	wartosć srodkowa - 0x02B1
-		{0x0299,	0x0233},		//	wartosć srodkowa - 0x0258
-		{0x0233,	0x01CC},		//	wartosć srodkowa - 0x0207
-		{0x01CC,	0x0166},		//	wartosć srodkowa - 0x01B0
-		{0x0166,	0x00FF},		//	wartosć srodkowa - 0x014A
-		{0x00FF,	0x0099},		//	wartosć srodkowa - 0x00D3
-		{0x0099,	0x0033},		//	wartosć srodkowa - 0x0061
-		{0x0033,	0x0000}			//	wartosć krańcowa - 0x0000
-};
-
 unsigned char i, tmp;
 
 /**
  ******************************************************************************
-  [..] RCC Referense Manual ST32L1xx p.xxx 
+  [..] RCC Referense Manual ST32F10x
  *
  *  @brief Init_RCC
  */
 void Init_RCC(void)
 {  
-  /** W��czenie zasilania interfejsu zegara */
-  SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN); 
+	/** W��czenie zasilania interfejsu zegara */
+	SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN);
 
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLMUL, RCC_CFGR_PLLMUL16);     // Mno�nik  /16	- Narazie mo�e zosta�
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLDIV, RCC_CFGR_PLLDIV2);     // Dzielnik /2	- Narazie mo�e zosta�
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLSRC, RCC_CFGR_PLLSRC_HSE);  // �r�d�o   HSE	- Narazie mo�e zosta�
+	//  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLMUL, RCC_CFGR_PLLMUL16);     // Mno�nik  /16	- Narazie mo�e zosta�
+	//  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLDIV, RCC_CFGR_PLLDIV2);     // Dzielnik /2	- Narazie mo�e zosta�
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLSRC, RCC_CFGR_PLLSRC_HSE);  // �r�d�o   HSE	- Narazie mo�e zosta�
   
-  SET_BIT(FLASH->ACR, FLASH_ACR_ACC64);                         // Wlaczenie obslugi 64bit odczytu flash
-  SET_BIT(FLASH->ACR, FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);    // 1WaitState + Prefetch enabled
+	//  SET_BIT(FLASH->ACR, FLASH_ACR_ACC64);                         // Wlaczenie obslugi 64bit odczytu flash
+	//  SET_BIT(FLASH->ACR, FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);    // 1WaitState + Prefetch enabled
 
-  /** W��cz Kwarc */
-  SET_BIT(RCC->CR, RCC_CR_HSEON); 
-  while(!(RCC->CR & RCC_CR_HSERDY)){}
-  
-  /** W��cz PLL */
-  SET_BIT(RCC->CR, RCC_CR_PLLON); 
-  while(!(RCC->CR & RCC_CR_PLLRDY)){}
+	/** W��cz Kwarc */
+	SET_BIT(RCC->CR, RCC_CR_HSEON);
+	while(!(RCC->CR & RCC_CR_HSERDY)){}
 
-  /** SYS_CLK 32 MHz*/ // - aktualne
+	/** W��cz PLL */
+	SET_BIT(RCC->CR, RCC_CR_PLLON);
+	while(!(RCC->CR & RCC_CR_PLLRDY)){}
 
-  /** Prze��cz zegar systemowy na PLL */
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL); 
-  while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL){}       // Sprawd� czy PLL // do 3 takt�w chyba
-  
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_HPRE,  RCC_CFGR_HPRE_DIV1);    // AHB  /1  magistrala systemowa HCLK = 32MHz Systick = 4000
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE1, RCC_CFGR_PPRE1_DIV1);   // APB1 /1  magistrala peryferi�w PCLK1 = 32MHz
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE2, RCC_CFGR_PPRE2_DIV1);   // APB2 /1  magistrala peryferi�w PCLK2 = 32MHz
+	/** SYS_CLK 72 MHz*/ // - aktualne
 
-  
-  /** W��czenie wyj�cia MCO -> podanie zegara SYS_CLK na pin PA8 portu A */
-  MODIFY_REG(RCC->CFGR, RCC_CFGR_MCOSEL, RCC_CFGR_MCO_SYSCLK);  // SYSCLK = 32MHz
+	/** Prze��cz zegar systemowy na PLL */
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL);
+	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL){}       // Sprawd� czy PLL // do 3 takt�w chyba
+
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_HPRE,  RCC_CFGR_HPRE_DIV1);    // AHB  /1  magistrala systemowa HCLK = 32MHz Systick = 4000
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE1, RCC_CFGR_PPRE1_DIV1);   // APB1 /1  magistrala peryferi�w PCLK1 = 32MHz
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE2, RCC_CFGR_PPRE2_DIV1);   // APB2 /1  magistrala peryferi�w PCLK2 = 32MHz
 }
 
+#if defined ( MEARM_BOARD_V_26_02_2017_H)
 
-
-#if defined ( PK_EL_BOARD_V_04_12_2014_H )
-
-/**
- * \brief Platform Board_04.12.2014
- */
+//
+// \brief Platform Board 26.02.2017
+//
 void Init_IO(void)
 {
-	/* PORT-A ----------------------------------------------------------------------------------------------------------*/
-	/*!< GPIO port A clock enable */
+//	PORT u�yte w projekcie
+//	PA0 - PA12, PA15,
+//	PB0, PB1, PB3 - PB15
+//	PC13 - PC15
+
+//	 PORT-A ----------------------------------------------------------------------------------------------------------
+//	!< GPIO port A clock enable
 	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOAEN);
 
-	/*!< GPIOA.AFR[0] */
-	/*  0   Nie u�ywane - wejcie */
-	/*  1   Nie u�ywane - wejcie */
-    /*  2   Nie u�ywane - wejcie */
-	MODIFY_REG(GPIOA->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
+//	CRL
+//	  0   Wyj�cie
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // 10 Output pin 10MHz
+//	  1
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // 10 Output pin 10MHz
+//    2
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE2, GPIO_CRL_MODE2_0); // 10 Output pin 10MHz
+//	  3
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE3, GPIO_CRL_MODE3_0); // 10 Output pin 10MHz
+//	  4
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // 10 Output pin 10MHz
+//	  5
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // 10 Output pin 10MHz
+//	  6
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // 10 Output pin 10MHz
+//	  7
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // 10 Output pin 10MHz
 
-	/*  3   Odczyt nastawy pr�du znamionowego - ADC5 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER3,	GPIO_MODER_MODER3_1 | GPIO_MODER_MODER3_0); // 11 Analog pin
+//	CRH
+//	  8
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // 10 Output pin 10MHz
+//	  9
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // 10 Output pin 10MHz
+//	 10
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, GPIO_CRH_MODE10_0); // 10 Output pin 10MHz
+//	 11
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE11, GPIO_CRH_MODE11_0); // 10 Output pin 10MHz
+//	 12
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // 10 Output pin 10MHz
+//	 13
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
+//	 14
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
+//	 15
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
 
-	/*  4   Zapis napi�cia pomiarowego - DAC1 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER4,	GPIO_MODER_MODER4_1 | GPIO_MODER_MODER4_0); // 11 Analog pin
 
-	/*  5   Odczyt nastawy pr�du zwarciowego - ADC3 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER5,	GPIO_MODER_MODER5_1 | GPIO_MODER_MODER5_0); // 11 Analog pin
-  
-		/*  6   Odczyt nastawy czasu wyzwalacza - ADC6 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
-  
-	/*  7   GPIO - Wejscie uruchomienia odmierzania czasu  */
-	MODIFY_REG(GPIOA->MODER,	GPIO_MODER_MODER7,	0); // 00 Input pin
-  
-	/*!< GPIOA.AFR[1] */
-	/*  8   GPIO - Wyb�r pomiaru wartoci pr�du  */
-	MODIFY_REG(GPIOA->MODER,	GPIO_MODER_MODER8,	GPIO_MODER_MODER8_0); // 01 OUTPUT pin
+	//	 PORT-B ----------------------------------------------------------------------------------------------------------
+	//	!< GPIO port B clock enable
+		SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOBEN);
 
-	/*  9   TX_USART_1 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER9,	GPIO_MODER_MODER9_1); // 10 AF pin
-	MODIFY_REG(GPIOA->AFR[1],   GPIO_AFRH_AFRH9, ((uint32_t) GPIO_AF_USART1 << ((uint32_t)((uint32_t)GPIO_PinSource9 & (uint32_t)0x07) * 4))  );
+	//	!< GPIOB.AFR[0]
+	//	  0   Nie u�ywane - wejcie
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
+	//	  1   Nie u�ywane - wejcie
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
+	//    2   Nie u�ywane
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
+	//	  3   Odczyt nastawy pr�du znamionowego - ADC5
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER3,	GPIO_MODER_MODER3_1 | GPIO_MODER_MODER3_0); // 11 Analog pin
+	//	  4   Zapis napi�cia pomiarowego - DAC1
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER4,	GPIO_MODER_MODER4_1 | GPIO_MODER_MODER4_0); // 11 Analog pin
+	//	  5   Odczyt nastawy pr�du zwarciowego - ADC3
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER5,	GPIO_MODER_MODER5_1 | GPIO_MODER_MODER5_0); // 11 Analog pin
+	//	  6   Odczyt nastawy czasu wyzwalacza - ADC6
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
+	//	  7   GPIO - Wejscie uruchomienia odmierzania czasu
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER7,	0); // 00 Input pin
+	//	!< GPIOA.AFR[1]
+	//	  8   GPIO - Wyb�r pomiaru wartoci pr�du
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER8,	GPIO_MODER_MODER8_0); // 01 OUTPUT pin
+	//	  9   TX_USART_1
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
+	//	 10   RX_USART_1
+		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
+	//	 11  USB - D- U�ywany do programowania
+	//	 12  USB - D+ U�ywany do programowania
+	//	 13 AF JTMS-SWDIO - bez zmian - To wymaga zastanowienia
+	//	 14 AF JTCK-SWCLK - bez zmian - To wymaga zastanowienia
+	//	 15 AF JTDI       - bez zmian
+		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER8,	GPIO_MODER_MODER8_0); // 01 OUTPUT pin
 
-	/* 10   RX_USART_1 */
-	MODIFY_REG(GPIOA->MODER,    GPIO_MODER_MODER10,	GPIO_MODER_MODER10_1); // 10 AF pin
-	MODIFY_REG(GPIOA->AFR[1],   GPIO_AFRH_AFRH10,((uint32_t) GPIO_AF_USART1 << ((uint32_t)((uint32_t)GPIO_PinSource10 & (uint32_t)0x07) * 4))  );
 
-	/* 11  USB - D- U�ywany do programowania */
-	/* 12  USB - D+ U�ywany do programowania */
-	/* 13 AF JTMS-SWDIO - bez zmian */
-	/* 14 AF JTCK-SWCLK - bez zmian */
-	/* 15 AF JTDI       - bez zmian */
-
-	/* PORT-B ----------------------------------------------------------------------------------------------------------*/
-	/*!< GPIO port B clock enable */
-	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOBEN);
-  
-	/*!< GPIOB.AFR[0] */
-	/*  0   Nie u�ywane - wejscie */
-	/*  1   Nie u�ywane - wejscie */
-  
-	/*  2 	BOOT1 - bez zmian */
-	/*  3 	JTDO	- bez zmian */
-	/*  4 	/JTRST	- bez zmian */
-    
-	/*  5   GPIO - Przeka�nik PK_1 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER5,    GPIO_MODER_MODER5_0); // 01 OUTPUT pin
-    
-	/*  6   GPIO - Przeka�nik PK_3 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,    GPIO_MODER_MODER6_0); // 01 OUTPUT pin
-
-	/*  7   GPIO - Przeka�nik PK_7 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER7,    GPIO_MODER_MODER7_0); // 01 OUTPUT pin
-    
-	/*!< GPIOB.AFR[1] */
-	/*	8   GPIO - Przeka�nik PK_6 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER8,    GPIO_MODER_MODER8_0);  // 01 OUTPUT pin
-
-	/*  9   GPIO - Przeka�nik PK_5 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER9,    GPIO_MODER_MODER9_0);  // 01 OUTPUT pin
-
-	/*  10   GPIO - Wejscie okrelające typ przekładnika  */
-	MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER10,	0); // 00 Input pin
-	MODIFY_REG(GPIOB->PUPDR,    GPIO_PUPDR_PUPDR10,    GPIO_PUPDR_PUPDR10_0); // 01: Pull-UP
-  
-	/*	11  GPIO - Włączenie odmierzania 120 sekund */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER11,    GPIO_MODER_MODER11_0); // 01 OUTPUT pin
-
-	/* 	12	Odczyt up�ywaj�cego czasu 120 sekund  */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER12,    GPIO_MODER_MODER12_1 | GPIO_MODER_MODER12_0); // 11 Analog pin
-
-	/* 	13	Odczyt FAZY 3 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER13,    GPIO_MODER_MODER13_1 | GPIO_MODER_MODER13_0); // 11 Analog pin
-  
-	/* 	14	Odczyt FAZY 2 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER14,    GPIO_MODER_MODER14_1 | GPIO_MODER_MODER14_0); // 11 Analog pin
-  
-	/*	15 Odczyt FAZY 1 */
-	MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER15,    GPIO_MODER_MODER15_1 | GPIO_MODER_MODER15_0); // 10 Analog pin
-  
-
-	/* PORT-C ----------------------------------------------------------------------------------------------------------*/
-	/*!< GPIO port C clock enable */
+//	 PORT-C ----------------------------------------------------------------------------------------------------------
+//	!< GPIO port C clock enable
 	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOCEN);
-  
-	/*!< GPIOC.AFR[0] */
-	/*  PC_0	GPIO - DIPSWITCH DP3_1 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER0,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR0,    GPIO_PUPDR_PUPDR0_0); // 01: Pull-UP
 
-	/*  PC_1	GPIO - DIPSWITCH DP3_2 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER1,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR1,    GPIO_PUPDR_PUPDR1_0); // 01: Pull-UP
-    
-	/*  PC_2	GPIO - DIPSWITCH DP3_3 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER2,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR2,    GPIO_PUPDR_PUPDR2_0); // 01: Pull-UP
-    
-	/*  PC_3	GPIO - DIPSWITCH DP3_4 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER3,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR3,    GPIO_PUPDR_PUPDR3_0); // 01: Pull-UP
-
-	/*  PC_4	GPIO - DIPSWITCH DP3_5 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER4,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR4,    GPIO_PUPDR_PUPDR4_0); // 01: Pull-UP
-
-	/*  PC_5	GPIO - DIPSWITCH DP3_6 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER5,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR5,    GPIO_PUPDR_PUPDR5_0); // 01: Pull-UP
-
-	/*  PC_6	GPIO - DIPSWITCH DP3_7 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER6,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR6,    GPIO_PUPDR_PUPDR6_0); // 01: Pull-UP
-
-	/*  PC_7	GPIO - DIPSWITCH DP3_8 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER7,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR7,    GPIO_PUPDR_PUPDR7_0); // 01: Pull-UP
-  
-	/*!< GPIOC.AFR[1] */
-	/*  PC_8	GPIO - DIPSWITCH DP2_1 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER8,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR8,    GPIO_PUPDR_PUPDR8_0); // 01: Pull-UP
-
-	/*  PC_9	GPIO - DIPSWITCH DP2_2 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER9,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR9,    GPIO_PUPDR_PUPDR9_0); // 01: Pull-UP
-
-	/* 	PC_10	GPIO - DIPSWITCH DP2_3 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER10,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR10,    GPIO_PUPDR_PUPDR10_0); // 01: Pull-UP
-
-	/* 	PC_11	GPIO - DIPSWITCH DP1_1 */
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER11,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR11,    GPIO_PUPDR_PUPDR11_0); // 01: Pull-UP
-
-	/*	PC_12	Odczyt wykrycia doziemienia	*/
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER12,    0); // 00 Input pin
-	MODIFY_REG(GPIOC->PUPDR,    GPIO_PUPDR_PUPDR12,    0); // 00 Floating
-
-	/*	PC_13	LED */
+//	!< GPIOC.AFR[0]
+//		PC_13	LED
 	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER13,    GPIO_MODER_MODER13_0); // 01 OUTPUT pin
-    
-	/*	PC_14	GPIO - Przeka�nik PK_2 */
+
+//		PC_14	GPIO - Przeka�nik PK_2
 	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER14,    GPIO_MODER_MODER14_0); // 01 OUTPUT pin
 
-	/*	PC_15	GPIO - Przeka�nik PK_4 */
+//		PC_15	GPIO - Przeka�nik PK_4
 	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER15,    GPIO_MODER_MODER15_0); // 01 OUTPUT pin
-    
-  
-	/* PORT-D ----------------------------------------------------------------------------------------------------------*/
-	/*!< GPIO port D clock enable */
-	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIODEN);
-  
-	/*!< GPIOD.AFR[0] */
-	/*  PD_2	Odczyt wykrycia wzrostu temperatury PTC */
-	MODIFY_REG(GPIOD->MODER,    GPIO_MODER_MODER2,    0); // 00 Input pin
-	MODIFY_REG(GPIOD->PUPDR,    GPIO_PUPDR_PUPDR2,    0); // 00 Floating
 
-    /* END GPIO ----------------------------------------------------------------------------------------------------------*/
+//     END GPIO ----------------------------------------------------------------------------------------------------------
 }
-#endif /// Board_04.12.2014
+#endif // Board
 
 
 void Init_Peripherals(void)
@@ -364,31 +233,30 @@ void StartUpReason(void)
 {
 //  unsigned int temp = RCC->CSR;
   
-	pk_elS.statusS.startUpS.Entire = 0;
+	sMeArm.statusS.startUpS.Entire = 0;
 
 	if(RCC->CSR & RCC_CSR_LPWRRSTF)
 	{
-		pk_elS.statusS.startUpS.LowPowerReset = 1;
+		sMeArm.statusS.startUpS.LowPowerReset = 1;
 	}
 	if(RCC->CSR & RCC_CSR_IWDGRSTF)
 	{
-		pk_elS.statusS.startUpS.IwdgReset = 1;
+		sMeArm.statusS.startUpS.IwdgReset = 1;
 	}
 	if(RCC->CSR & RCC_CSR_SFTRSTF)
 	{
-		pk_elS.statusS.startUpS.SoftReset = 1;
+		sMeArm.statusS.startUpS.SoftReset = 1;
 	}
 	if(RCC->CSR & RCC_CSR_PORRSTF)
 	{
-		pk_elS.statusS.startUpS.PdrReset = 1;
+		sMeArm.statusS.startUpS.PdrReset = 1;
 	}
 	if(RCC->CSR & RCC_CSR_PINRSTF)
 	{
-		pk_elS.statusS.startUpS.PinReset = 1;
+		sMeArm.statusS.startUpS.PinReset = 1;
 	}
-  
-  TimerLowSpeedStart(eTimerLowSpeed_StartUp, 50);
 
+	TimerLowSpeedStart(eTimerLowSpeed_StartUp, 50);
 }
 
 unsigned char pot(unsigned int **tab, unsigned int pom)
@@ -407,136 +275,8 @@ unsigned char pot(unsigned int **tab, unsigned int pom)
 	return i;
 }
 
-void Init_Setup(void)
-{
-	unsigned char krok;
-	unsigned int pomiar;
-
-
-	pk_elS.Setup.Current_Transformer = CHECK_CRAMP;			// przekładnik 3mV/A
-
-	switch((DIPSWITCH_1 & 0x00e0)>>5)						// mnoznik wspoółczynnika prądu nominalnego
-	{
-		case 0:
-			pk_elS.Setup.Nominal_Current_Mull = Nominal_Current_Mull_TypeE_0_3;
-			mull = 3;
-			break;
-		case 4:
-			pk_elS.Setup.Nominal_Current_Mull = Nominal_Current_Mull_TypeE_1;
-			mull = 10;
-			break;
-		case 2:
-			pk_elS.Setup.Nominal_Current_Mull = Nominal_Current_Mull_TypeE_3;
-			mull = 30;
-			break;
-		case 1:
-			pk_elS.Setup.Nominal_Current_Mull = Nominal_Current_Mull_TypeE_10;
-			mull = 100;
-			break;
-		default:
-//			LED_ON;
-//			while(1);
-			break;
-	}
-
-	switch(DIPSWITCH_1 & 0x0003)
-	{
-		case 3:
-			pk_elS.Setup.Characteristic = Characteristic_TypeE_5s;
-			break;
-		case 1:
-			pk_elS.Setup.Characteristic = Characteristic_TypeE_8s;
-			break;
-		case 2:
-			pk_elS.Setup.Characteristic = Characteristic_TypeE_8s;
-			break;
-		case 0:
-			pk_elS.Setup.Characteristic = Characteristic_TypeE_20s;
-			break;
-		default:
-//			LED_ON;
-//			while(1);
-			break;
-	}
-
-	if((DIPSWITCH_1 & (0x10)))
-		pk_elS.Setup.Rush_Delay = Rush_DelayE_On;
-	else
-		pk_elS.Setup.Rush_Delay = Rush_DelayE_Off;
-
-	if((DIPSWITCH_1 & (1<<3)) == 0x08)
-		pk_elS.Setup.Phase_Control = Phase_ControlE_On;
-	else
-		pk_elS.Setup.Phase_Control = Phase_ControlE_Off;
-
-	if((DIPSWITCH_1 & (1<<2)) == 0x04)
-		pk_elS.Setup.A_Blockade = A_BlockadeE_On;
-	else
-		pk_elS.Setup.A_Blockade = A_BlockadeE_Off;
-
-	switch(DIPSWITCH_2)
-	{
-		case 4:
-			pk_elS.Setup.Short_Circuit_Blockade = Short_Circuit_BlockadeE_No_Reset;
-			break;
-		case 0:
-			pk_elS.Setup.Short_Circuit_Blockade = Short_Circuit_BlockadeE_Electric_Reset;
-			break;
-		case 6:
-			pk_elS.Setup.Short_Circuit_Blockade = Short_Circuit_BlockadeE_Mechanical_Reset;
-			break;
-		case 1:
-			pk_elS.Setup.Short_Circuit_Blockade = Short_Circuit_BlockadeE_Delay_Reset;
-			break;
-		default:
-//			LED_ON;
-//			while(1);
-			break;
-	}
-
-	if(DIPSWITCH_3)
-		pk_elS.Setup.PTC_Control = PTC_ControlE_On;
-	else
-		pk_elS.Setup.PTC_Control = PTC_ControlE_Off;
-
-	//
-	//	odczyt ustawień potencjometrów
-	//
-
-	// Czas załączenia przekaźnika
-
-	pomiar = 0;
-
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_24Cycles);
-	for(krok=0; krok<4; krok++)
-	{
-		ADC_SoftwareStartConv(ADC1);
-		while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
-		pomiar += ADC_GetConversionValue(ADC1);
-	}
-	pk_elS.Setup.TimeDelayOn = pot((unsigned int **)delayTimeOnTable, pomiar>>2)-1;
-	pomiar = 0;
-
-	// Ustawienie prądu znamionowego
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 1, ADC_SampleTime_24Cycles);
-	for(krok=0; krok<4; krok++)
-	{
-		ADC_SoftwareStartConv(ADC1);
-		while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
-		pomiar += ADC_GetConversionValue(ADC1);
-	}
-	pk_elS.Setup.Nominal_Current_Pot = pot((unsigned int **)nominalCcurrentTable, pomiar>>2)+6;
-	pomiar = 0;
-
-	// ustawienie prądu zwarciowego
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_24Cycles);
-	for(krok=0; krok<4; krok++)
-	{
-		ADC_SoftwareStartConv(ADC1);
-		while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
-		pomiar += ADC_GetConversionValue(ADC1);
-	}
-	pk_elS.Setup.Short_Circuit_Current = pot((unsigned int **)shortCircuitCurrentTable, pomiar>>2)+2;
-
-
-}
+//void Init_Setup(void)
+//{
+//	unsigned char krok;
+//	unsigned int pomiar;
+//}
