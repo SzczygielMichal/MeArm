@@ -26,11 +26,11 @@
 #include "stm32f10x_dac.h"
 #include "..\setup\setup.h"
 #include "..\app\debug\debug.h"
-#include "..\app\led\led.h"
-//#include "app\version\version.h"
 #include "..\app\potentiometer\potentiometer.h"
 #include "dbg_ctrl.h"
 #include "main.h"
+
+#include "../app/led/LED.h"
 #include "../peripherals/iwdg/iwdg.h"
 #include "../peripherals/timer/timer.h"
 #include "../peripherals/uart/uart.h"
@@ -54,22 +54,17 @@ int main(void)
 
 	Init_RCC();
 	Init_IO();
-//	Init_Peripherals();
+	Init_Peripherals();
 //	Init_ADC();
 //	Init_Setup();
-//	Init_DAC();
 
-//	Short_Circuit_BlockadeE_Delay_Reset_Handler();
 
-//	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
-//	TimerStart(eTimer_Setup, 100);						// Sprawdzanie
-//	TimerStart(eTimer_PTC_Check, 50);					// Sprawdzanie temperatury PTC co 50ms
-//	TimerStart(eTimer_TimeDelayOnCheck, 50);			// Odmierzanie czasu do włączenia przekaźnika REL5
-//	TimerStart(eTimer_Potentiometer_Check, 50);
-//	TimerStart(eTimer_ShortCircuit_Check, 50);
-//	TimerUStart(eTimerUS_Dac, 40);
+	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
+	TimerStart(eTimer_Setup, 100);						// Sprawdzanie
+	TimerStart(eTimer_Potentiometer_Check, 50);
+	TimerUStart(eTimerUS_Dac, 40);
 
-//	Init_Debug();
+	Init_Debug();
 //	Init_IWDG();
 
 //	Debug_Intro();

@@ -14,6 +14,7 @@ void TimerUS_Handler(void);
 signed int Timer_us[eNumberOfUSTimers];        // 100us
 signed int Timer_ms[eNumberOfTimers];          // 1ms
 signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
+
 unsigned int TimerCS;
 
 //--- WYKORZYSTANIE TIMER�W -----------------------------------------------------

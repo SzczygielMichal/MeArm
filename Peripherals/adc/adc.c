@@ -1,11 +1,11 @@
 
-#include "stm32l1xx.h"
-#include "peripherals\adc\adc.h"
-#include "peripherals\timer\timer.h"
-#include "setup\setup.h"
-#include "cmsis_lib\include\stm32l1xx_adc.h"
-#include "cmsis_lib\include\stm32l1xx_rcc.h"
-#include "cmsis_lib\include\misc.h"
+#include "stm32f10x.h"
+#include "..\peripherals\adc\adc.h"
+#include "..\peripherals\timer\timer.h"
+#include "..\setup\setup.h"
+#include "..\inc\stm32f10x_adc.h"
+#include "..\inc\stm32f10x_rcc.h"
+#include "..\inc\misc.h"
 
 /*------------------------------------------------------------------------*/
 //struct sADC_Control ADC_Control;
@@ -252,6 +252,7 @@ float ADC_Read_Voltage(enum eADC_Injected ADC_Channel)
 }
 */
 
+/*
 void Init_ADC(void)
 {
 	// Wӹczenie zasilania dla ADC 1
@@ -277,5 +278,6 @@ void Init_ADC(void)
 	ADC_Init(ADC1, &ADC_InitStructure);
 	ADC_Cmd(ADC1, ENABLE);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_24Cycles);
-
 }
+*/
+

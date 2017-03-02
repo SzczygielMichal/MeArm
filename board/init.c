@@ -60,6 +60,7 @@
 #include "..\StdPeriph_Driver\inc\misc.h"
 #include "..\StdPeriph_Driver\inc\stm32f10x_adc.h"
 #include "dbg_ctrl.h"
+
 #include "../peripherals/timer/timer.h"
 #include "../peripherals/uart/uart.h"
 
@@ -117,7 +118,7 @@ void Init_IO(void)
 
 //	 PORT-A ----------------------------------------------------------------------------------------------------------
 //	!< GPIO port A clock enable
-	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOAEN);
+	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 
 //	CRL
 //	  0   Wyjœcie
@@ -156,55 +157,58 @@ void Init_IO(void)
 	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
 
 
-	//	 PORT-B ----------------------------------------------------------------------------------------------------------
-	//	!< GPIO port B clock enable
-		SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOBEN);
+//	 PORT-B ----------------------------------------------------------------------------------------------------------
+//	!< GPIO port B clock enable
+	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN);
 
-	//	!< GPIOB.AFR[0]
-	//	  0   Nie uï¿½ywane - wejcie
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
-	//	  1   Nie uï¿½ywane - wejcie
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
-	//    2   Nie uï¿½ywane
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER2,	0); // 00 Input pin
-	//	  3   Odczyt nastawy prï¿½du znamionowego - ADC5
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER3,	GPIO_MODER_MODER3_1 | GPIO_MODER_MODER3_0); // 11 Analog pin
-	//	  4   Zapis napiï¿½cia pomiarowego - DAC1
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER4,	GPIO_MODER_MODER4_1 | GPIO_MODER_MODER4_0); // 11 Analog pin
-	//	  5   Odczyt nastawy prï¿½du zwarciowego - ADC3
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER5,	GPIO_MODER_MODER5_1 | GPIO_MODER_MODER5_0); // 11 Analog pin
-	//	  6   Odczyt nastawy czasu wyzwalacza - ADC6
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
-	//	  7   GPIO - Wejscie uruchomienia odmierzania czasu
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER7,	0); // 00 Input pin
-	//	!< GPIOA.AFR[1]
-	//	  8   GPIO - Wybï¿½r pomiaru wartoci prï¿½du
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER8,	GPIO_MODER_MODER8_0); // 01 OUTPUT pin
-	//	  9   TX_USART_1
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
-	//	 10   RX_USART_1
-		MODIFY_REG(GPIOB->MODER,    GPIO_MODER_MODER6,	GPIO_MODER_MODER6_1 | GPIO_MODER_MODER6_0); // 11 Analog pin
-	//	 11  USB - D- Uï¿½ywany do programowania
-	//	 12  USB - D+ Uï¿½ywany do programowania
-	//	 13 AF JTMS-SWDIO - bez zmian - To wymaga zastanowienia
-	//	 14 AF JTCK-SWCLK - bez zmian - To wymaga zastanowienia
-	//	 15 AF JTDI       - bez zmian
-		MODIFY_REG(GPIOB->MODER,	GPIO_MODER_MODER8,	GPIO_MODER_MODER8_0); // 01 OUTPUT pin
+//	CRL
+//	  0   Wyjœcie
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // 10 Output pin 10MHz
+//	  1
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // 10 Output pin 10MHz
+//    2
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE2, GPIO_CRL_MODE2_0); // 10 Output pin 10MHz
+//	  3
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE3, GPIO_CRL_MODE3_0); // 10 Output pin 10MHz
+//	  4
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // 10 Output pin 10MHz
+//	  5
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // 10 Output pin 10MHz
+//	  6
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // 10 Output pin 10MHz
+//	  7
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // 10 Output pin 10MHz
+
+//	CRH
+//	  8
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // 10 Output pin 10MHz
+//	  9
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // 10 Output pin 10MHz
+//	 10
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE10, GPIO_CRH_MODE10_0); // 10 Output pin 10MHz
+//	 11
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE11, GPIO_CRH_MODE11_0); // 10 Output pin 10MHz
+//	 12
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // 10 Output pin 10MHz
+//	 13
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
+//	 14
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
+//	 15
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
 
 
 //	 PORT-C ----------------------------------------------------------------------------------------------------------
 //	!< GPIO port C clock enable
-	SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOCEN);
+	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPCEN);
 
-//	!< GPIOC.AFR[0]
-//		PC_13	LED
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER13,    GPIO_MODER_MODER13_0); // 01 OUTPUT pin
-
-//		PC_14	GPIO - Przekaï¿½nik PK_2
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER14,    GPIO_MODER_MODER14_0); // 01 OUTPUT pin
-
-//		PC_15	GPIO - Przekaï¿½nik PK_4
-	MODIFY_REG(GPIOC->MODER,    GPIO_MODER_MODER15,    GPIO_MODER_MODER15_0); // 01 OUTPUT pin
+//	CRH
+//	 13
+	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
+//	 14
+	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
+//	 15
+	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
 
 //     END GPIO ----------------------------------------------------------------------------------------------------------
 }
