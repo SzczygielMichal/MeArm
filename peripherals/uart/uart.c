@@ -7,7 +7,7 @@
 //#include "peripherals\dma\dma.h"
 #include "..\app\debug\debug.h"
 #include "..\StdPeriph_Driver\inc\misc.h"
-#include "../timer/timer.h"
+#include "..\timer\timer.h"
 
 struct specialUART  sUART1;
 
