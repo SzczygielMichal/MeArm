@@ -116,86 +116,98 @@ void Init_IO(void)
 //	PB0, PB1, PB3 - PB15
 //	PC13 - PC15
 
-//	 PORT-A ----------------------------------------------------------------------------------------------------------
-//	!< GPIO port A clock enable
+//	PORT-A ----------------------------------------------------------------------------------------------------------
+//	GPIO port A clock enable
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPAEN);
 
 //	CRL
-//	  0   Wyj쐁ie
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // 10 Output pin 10MHz
-//	  1
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // 10 Output pin 10MHz
-//    2
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE2, GPIO_CRL_MODE2_0); // 10 Output pin 10MHz
-//	  3
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE3, GPIO_CRL_MODE3_0); // 10 Output pin 10MHz
-//	  4
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // 10 Output pin 10MHz
-//	  5
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // 10 Output pin 10MHz
-//	  6
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // 10 Output pin 10MHz
-//	  7
-	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // 10 Output pin 10MHz
+//	  0		PA0	-	ADC0	-	Pomiar warto쐁i potencometru
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE0, 0);	// ANALOG INPUT
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF0, 0); 	// ANALOG INPUT
+//	  1		PA1	-	ACD1	-	Pomiar warto쐁i potencometru
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE1, 0);	// ANALOG INPUT
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF1, 0);	// ANALOG INPUT
+//    2		PA2	-	ADC2	-	Pomiar warto쐁i potencometru
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE2, 0);	// ANALOG INPUT
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF2, 0);	// ANALOG INPUT
+//	  3		PA3	-	ADC3	-	Pomiar warto쐁i potencometru
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE3, 0);	// ANALOG INPUT
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF3, 0);	// ANALOG INPUT
+//	  4		PA4	-	ADC4	-	Pomiar warto쐁i potencometru
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE4, 0);	// ANALOG INPUT
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF4, 0);	// ANALOG INPUT
+//	  5		PA5	-	SPI_SCK	-	LED WS2812B
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // SPI1_SCK Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF5, GPIO_CRL_CNF5_1);	// Alternate function push-pull
+//	  6		PA6	-	SPI_MISO-	LED WS2812B
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE6, 0); // SPI1_MISO Input
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF6, GPIO_CRL_CNF6_1);	// 	Input floating / Input pull-up
+//	  7		PA7	-	SPI_MOSI-	LED WS2812B
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // SPI1_MOSI Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRL_CNF7, GPIO_CRL_CNF7_1);	// Alternate function push-pull
 
 //	CRH
-//	  8
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // 10 Output pin 10MHz
-//	  9
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // 10 Output pin 10MHz
-//	 10
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, GPIO_CRH_MODE10_0); // 10 Output pin 10MHz
-//	 11
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE11, GPIO_CRH_MODE11_0); // 10 Output pin 10MHz
-//	 12
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // 10 Output pin 10MHz
-//	 13
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
-//	 14
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
-//	 15
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
-
+//	  8		PA8		-	Nie u퓓wane
+//	  9		PA9		-	USART1_TX
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // USART1_TX Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
+//	 10		PA10	-	USART1_RX
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, 0); // USART_RX Input pin
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF10, GPIO_CRH_CNF9_1);	// Input floating / Input pull-up
+//	 11		PA11	-	USB_DM	-	Aktualnie nie u퓓wane
+//	 12		PA12	-	USB_DP	-	Aktualnie nie u퓓wane
+//	 13		PA13	-	Nie u퓓wane
+//	 14		PA14	-	Nie u퓓wane
+//	 15		PA15	-	Nie u퓓wane
 
 //	 PORT-B ----------------------------------------------------------------------------------------------------------
-//	!< GPIO port B clock enable
+//	GPIO port B clock enable
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN);
 
 //	CRL
-//	  0   Wyj쐁ie
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // 10 Output pin 10MHz
-//	  1
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // 10 Output pin 10MHz
-//    2
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE2, GPIO_CRL_MODE2_0); // 10 Output pin 10MHz
-//	  3
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE3, GPIO_CRL_MODE3_0); // 10 Output pin 10MHz
-//	  4
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // 10 Output pin 10MHz
-//	  5
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // 10 Output pin 10MHz
+//	  0   	PB0		-	TIM3	-	PWM Channel 3
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF0, GPIO_CRL_CNF0_1);	// Alternate function push-pull
+//	  1		PB1		-	TIM3	-	PWM Channel 4
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF1, GPIO_CRL_CNF1_1);	// Alternate function push-pull
+//    2		PB2		-	Nie u퓓wane
+//	  3		PB3		-	Nie u퓓wane
+//	  4		PB4		-	TIM3	-	PWM Channel 1
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF4, GPIO_CRL_CNF4_1);	// Alternate function push-pull
+//	  5		PB5		-	TIM3	-	PWM Channel 0
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF5, GPIO_CRL_CNF5_1);	// Alternate function push-pull
 //	  6
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // 10 Output pin 10MHz
 //	  7
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // 10 Output pin 10MHz
 
-//	CRH
+	//	CRH
 //	  8
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // 10 Output pin 10MHz
 //	  9
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // 10 Output pin 10MHz
 //	 10
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE10, GPIO_CRH_MODE10_0); // 10 Output pin 10MHz
 //	 11
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE11, GPIO_CRH_MODE11_0); // 10 Output pin 10MHz
 //	 12
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // 10 Output pin 10MHz
-//	 13
+//	 133
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
 //	 14
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
 //	 15
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
+
+//	  12		PB12	-	SPI_NSS	-	LCD
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_SCK Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
+//	  13		PB13	-	SPI_SCK	-	LCD
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
+//	  14		PA14		-	SPI_MISO-	LCD
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE14, 0); // SPI2_MISO Input
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
+//	  15		PA15		-	SPI_MOSI-	LCD
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
 
 
 //	 PORT-C ----------------------------------------------------------------------------------------------------------

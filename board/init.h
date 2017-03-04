@@ -6,6 +6,7 @@
 
 	#define bool _Bool
 	#define FALSE 0
+
 	#define TRUE !FALSE
 
 	extern unsigned int i_nom, mull;
