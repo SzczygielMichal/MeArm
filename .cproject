@@ -78,6 +78,7 @@
 						<toolChain id="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug.636062141" name="Ac6 STM32 MCU GCC" superClass="fr.ac6.managedbuild.toolchain.gnu.cross.exe.debug" unusedChildren="">
 							<option id="fr.ac6.managedbuild.option.gnu.cross.mcu.281824882.1537938730" name="Mcu" superClass="fr.ac6.managedbuild.option.gnu.cross.mcu.281824882"/>
 							<option id="fr.ac6.managedbuild.option.gnu.cross.board.750725785.697608459" name="Board" superClass="fr.ac6.managedbuild.option.gnu.cross.board.750725785"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="fr.ac6.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="fr.ac6.managedbuild.targetPlatform.gnu.cross"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.96308033" name="MCU GCC Compiler" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.1206783445">
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c.1297802163" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.c"/>
 								<inputType id="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s.1724560803" superClass="fr.ac6.managedbuild.tool.gnu.cross.c.compiler.input.s"/>
@@ -87,7 +88,7 @@
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.1392536758" name="MCU G++ Linker" superClass="fr.ac6.managedbuild.tool.gnu.cross.cpp.linker.137722175"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.archiver.1680436054" name="MCU GCC Archiver" superClass="fr.ac6.managedbuild.tool.gnu.archiver.99676771"/>
 							<tool id="fr.ac6.managedbuild.tool.gnu.cross.assembler.985679736" name="MCU GCC Assembler" superClass="fr.ac6.managedbuild.tool.gnu.cross.assembler.2097788852">
-								<option id="gnu.both.asm.option.include.paths.1830652990" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.1830652990" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/inc&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/board&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/CMSIS/core&quot;"/>
