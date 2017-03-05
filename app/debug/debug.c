@@ -39,7 +39,6 @@ void Console_Handler(void);
 
 unsigned char Debug_SendData(unsigned char *Data, unsigned char DataCount);
 
-
 /*----------------------------------------------------*/
 
 // przejecie printf'a
@@ -144,7 +143,7 @@ unsigned char EmptyFunc(unsigned char *string)
 
 unsigned char HelloFunc(unsigned char *string)
 {
-  printf("Witaj!!!! to ja PrzekaÅºnik\n\r");
+  printf("Witaj!!!! To ja NANO\n\r");
   ConsoleClear();
   return F_RESULT_OK;
 }
@@ -171,7 +170,7 @@ unsigned char PomocFunc(unsigned char *string)
   unsigned char i;
 
   TextYellow;
-  printf("\n>>>\tSÅ‚owa Kluczowe\t<<<\n");
+  printf("\n>>>\tS³owa Kluczowe\t<<<\n");
   TextGreen;
   for(i = 1; i < CONSOLE_FUNCTION_QUANTITY; i++)
   {
@@ -185,7 +184,7 @@ unsigned char PomocFunc(unsigned char *string)
 
 
 /// -------------------------------------------------------------------------------------------
-///	sterowanie LED6
+///	sterowanie LED1
 /// -------------------------------------------------------------------------------------------
 
 unsigned char LedOnFunc(unsigned char *string)
@@ -241,12 +240,12 @@ unsigned char LoginToConsoleFunc(unsigned char *string)
       if(LoginToConsole_CheckLogin(string) == F_RESULT_OK)
      {
       ConsoleCtrl.Step = 2;
-        printf("Podaj hasÅ‚o: ");
+        printf("Podaj has³o: ");
       }
       else
       {
         TextRed;
-        printf("BÅ‚Ä™dny login\n\r\n\r");
+        printf("B³êdny login\n\r\n\r");
         TextDefault;
         printf("Podaj login : ");
         ConsoleCtrl.Step = 1;
@@ -265,7 +264,7 @@ unsigned char LoginToConsoleFunc(unsigned char *string)
       else
       {
         TextRed;
-        printf("BÅ‚Ä™dne hasÅ‚o\n\r\n\r");
+        printf("B³êdne has³o\n\r\n\r");
        TextDefault;
         printf("Podaj login: ");
         ConsoleCtrl.Step = 1;
@@ -287,11 +286,113 @@ unsigned char LoginToConsole_CheckLogin(unsigned char *string)
 
 unsigned char LoginToConsole_CheckPassword(unsigned char *string)
 {
-  /* W przyszÅ‚oÅ›ci zrobiÄ‡ jakiÅ› uÅ¼ytkownikÃ³w */
-  if(strcmp((char*)string, "1457") == 0)
-    return F_RESULT_OK;
+
+	if(strcmp((char*)string, "1457") == 0)
+		return F_RESULT_OK;
   else
     return F_RESULT_ERR;
+}
+
+unsigned char SetupPrint(unsigned char *string)
+{
+	unsigned int i_nom_c, i_nom_p, short_circuit_current_c, short_circuit_current_p;
+	printf("\033[2J");
+	printf("\033[0;0f");
+
+//	printf("\tDelay_Time_On:\t\t\t%d\n\r", pk_elS.Setup.TimeDelayOn);
+//	printf("\tShort_Circuit_Current_Mull:\t%d\n\r", pk_elS.Setup.Short_Circuit_Current);
+//	printf("\tNominal_Current_Pot:\t\t%d\n\r", pk_elS.Setup.Nominal_Current_Pot);
+//	if(pk_elS.Setup.Current_Transformer)
+//		printf("\tCurrent_Transformer:\t\t3mV/A\n\r");
+//	else
+//	{
+//		printf("\tCurrent_Transformer:\t\t1mV/A\n\r");
+//	}
+//	if(pk_elS.Setup.Rush_Delay)
+//		printf("\tRush_Delay:\t\t\tON\n\r");
+//	else
+//	{
+//		printf("\tRush_Delay:\t\t\tOFF\n\r");
+//	}
+//	if(pk_elS.Setup.Phase_Control)
+//		printf("\tPhase_Control:\t\t\tON\n\r");
+//	else
+//	{
+//		printf("\tPhase_Control:\t\t\tOFF\n\r");
+//	}
+//	if(pk_elS.Setup.A_Blockade)
+//		printf("\tA_Blockade:\t\t\tON\n\r");
+//	else
+//	{
+//		printf("\tA_Blockade:\t\t\tOFF\n\r");
+//	}
+//	if(pk_elS.Setup.PTC_Control)
+//		printf("\tPTC_Control_Time_Delay:\t\t500[ms] - ON\n\r");
+//	else
+//	{
+//		printf("\tPTC_Control_Time_Delay:\t\t100[ms] - OFF\n\r");
+//	}
+//	switch(pk_elS.Setup.Nominal_Current_Mull)
+//	{
+//		case Nominal_Current_Mull_TypeE_0_3:
+//			printf("\tNominal_Current_Mull:\t\tx0.3\n\r");
+//			break;
+//		case Nominal_Current_Mull_TypeE_1:
+//			printf("\tNominal_Current_Mull:\t\tx1\n\r");
+//			break;
+//		case Nominal_Current_Mull_TypeE_3:
+//			printf("\tNominal_Current_Mull:\t\tx3\n\r");
+//			break;
+//		case Nominal_Current_Mull_TypeE_10:
+//			printf("\tNominal_Current_Mull:\t\tx10\n\r");
+//			break;
+//		default:
+//			printf("\tNominal_Current_Mull:\t\tERR\n\r");
+//			break;
+//	}
+//	switch(pk_elS.Setup.Characteristic)
+//	{
+//		case Characteristic_TypeE_5s:
+//			printf("\tCharacteristic:\t\t\t5[s]\n\r");
+//			break;
+//		case Characteristic_TypeE_8s:
+//			printf("\tCharacteristic:\t\t\t8[s]\n\r");
+//			break;
+//		case Characteristic_TypeE_20s:
+//			printf("\tCharacteristic:\t\t\t20[s]\n\r");
+//			break;
+//		default:
+//			printf("\tCharacteristic:\t\t\tERR\n\r");
+//			break;
+//	}
+//	switch(pk_elS.Setup.Short_Circuit_Blockade)
+//	{
+//		case Short_Circuit_BlockadeE_No_Reset:
+//			printf("\tShort_Circuit_BlockadeE:\tNo_Reset\n\r");
+//			break;
+//		case Short_Circuit_BlockadeE_Electric_Reset:
+//			printf("\tShort_Circuit_BlockadeE:\tElectric_Reset\n\r");
+//			break;
+//		case Short_Circuit_BlockadeE_Mechanical_Reset:
+//			printf("\tShort_Circuit_BlockadeE:\tMechanical_Reset\n\r");
+//			break;
+//		case Short_Circuit_BlockadeE_Delay_Reset:
+//			printf("\tShort_Circuit_BlockadeE:\tDelay_Reset\n\r");
+//			break;
+//		default:
+//			printf("\tShort_Circuit_Blockade:\tERR\n\r");
+//			break;
+//	}
+
+//	i_nom_c = i_nom/10;
+//	i_nom_p = i_nom%10;
+//	short_circuit_current_c = short_circuit_current/10;
+//	short_circuit_current_p = short_circuit_current%10;
+//	printf("\tNominal_Current:\t\t%d.%d [A]\n\r",i_nom_c, i_nom_p);
+//	printf("\tShort_Circuit_Current:\t\t%d.%d [A]\n\r", short_circuit_current_c, short_circuit_current_p);
+
+	ConsoleClear();
+	return F_RESULT_OK;
 }
 
 void Console_Handler(void)
@@ -431,4 +532,23 @@ void ConsoleClear(void)
 }
 /***********************************************************************************************/
 
-
+void Debug_Intro (void)
+{
+	printf("\033[2J");    // Czyszczenie ekranu
+	printf("\033[00f");  // Ustawienie kursora
+	printf("********************************************************************\n\r");
+	printf("********                       MeArm                        ********\n\r");
+	printf("********                 Micha³ Szczygie³                   ********\n\r");
+	printf("********                                                    ********\n\r");
+	printf("********                  tel. 32-202-78-86                 ********\n\r");
+	printf("********************************************************************\n\r");
+	printf("********          \033[33mRamie robotyczne\033[39m          ********\n\r");
+	printf("********************************************************************\n\r");
+//	printf("********        Data kompilacji:      %14s        ********\n\r", DATE_NOW);
+//	printf("********        Godzina kompilacji:   %14s        ********\n\r", TIME_NOW);
+//	printf("********        Data rewizji:         %14s        ********\n\r", DATE_REV);
+//	printf("********        Godzina rewizji:      %14s        ********\n\r", TIME_REV);
+//	printf("********        Rewizja:              %14d        ********\n\r", REVISION);
+//	printf("********        Wersja Pcb:           %14s        ********\n\r", BOARDREV);
+	printf("********************************************************************\n\r");
+}

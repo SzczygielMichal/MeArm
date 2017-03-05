@@ -1,4 +1,4 @@
-#include "stm32f10x_adc.h"
+#include "..\StdPeriph_Driver\inc\stm32f10x_adc.h"
 #include "..\board\init.h"
 #include "..\setup\setup.h"
 #include "..\peripherals\ADC\ADC.h"
@@ -17,10 +17,10 @@ void Potentiometer_Handler(void)
 		// Czas załączenia przekaźnika
 		pomiar = 0;
 
-		ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_24Cycles);
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_6, 1, ADC_SampleTime_28Cycles5);
 		for(krok=0; krok<4; krok++)
 		{
-			ADC_SoftwareStartConv(ADC1);
+//			ADC_SoftwareStartConv(ADC1);
 			while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
 			pomiar += ADC_GetConversionValue(ADC1);
 		}
@@ -28,10 +28,10 @@ void Potentiometer_Handler(void)
 		pomiar = 0;
 
 		// Ustawienie prądu znamionowego
-		ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 1, ADC_SampleTime_24Cycles);
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 1, ADC_SampleTime_28Cycles5);
 		for(krok=0; krok<4; krok++)
 		{
-			ADC_SoftwareStartConv(ADC1);
+//			ADC_SoftwareStartConv(ADC1);
 			while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
 			pomiar += ADC_GetConversionValue(ADC1);
 		}
@@ -39,10 +39,10 @@ void Potentiometer_Handler(void)
 		pomiar = 0;
 
 		// ustawienie prądu zwarciowego
-		ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_24Cycles);
+		ADC_RegularChannelConfig(ADC1, ADC_Channel_5, 1, ADC_SampleTime_28Cycles5);
 		for(krok=0; krok<4; krok++)
 		{
-			ADC_SoftwareStartConv(ADC1);
+//			ADC_SoftwareStartConv(ADC1);
 			while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
 			pomiar += ADC_GetConversionValue(ADC1);
 		}

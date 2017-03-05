@@ -42,6 +42,7 @@ void Debug_Handler(void);
 
 void ScreenOvertake(void);
 void ScreenOvertake_Handler(void *fPtrOnScreen);
+void Debug_Intro (void);
 
 #endif
 

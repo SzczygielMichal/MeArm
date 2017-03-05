@@ -63,7 +63,7 @@
 
 #include "../peripherals/timer/timer.h"
 #include "../peripherals/uart/uart.h"
-
+#include "../peripherals/adc/adc.h"
 unsigned int i_nom, mull;
 unsigned char i, tmp;
 
@@ -156,8 +156,8 @@ void Init_IO(void)
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF10, GPIO_CRH_CNF9_1);	// Input floating / Input pull-up
 //	 11		PA11	-	USB_DM	-	Aktualnie nie u퓓wane
 //	 12		PA12	-	USB_DP	-	Aktualnie nie u퓓wane
-//	 13		PA13	-	Nie u퓓wane
-//	 14		PA14	-	Nie u퓓wane
+//	 13		PA13	-	SWDIO
+//	 14		PA14	-	SWCLK
 //	 15		PA15	-	Nie u퓓wane
 
 //	 PORT-B ----------------------------------------------------------------------------------------------------------
@@ -179,50 +179,41 @@ void Init_IO(void)
 //	  5		PB5		-	TIM3	-	PWM Channel 0
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF5, GPIO_CRL_CNF5_1);	// Alternate function push-pull
-//	  6
-//	  7
+//	  6		PB6	-	Nie u퓓wane
+//	  7		PB7	-	Nie u퓓wane
 
 	//	CRH
-//	  8
-//	  9
-//	 10
-//	 11
-//	 12
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // 10 Output pin 10MHz
-//	 133
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
-//	 14
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
-//	 15
-	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
-
-//	  12		PB12	-	SPI_NSS	-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_SCK Output pin 10MHz
+//	  8		PB8	-	Nie u퓓wane
+//	  9		PB9	-	Nie u퓓wane
+//	  10	PB10-	Nie u퓓wane
+//	  11	PB11-	Nie u퓓wane
+//	  12	PB12-	SPI_NSS	-	LCD
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_NSS Output pin 10MHz
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
 //	  13		PB13	-	SPI_SCK	-	LCD
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
 //	  14		PA14		-	SPI_MISO-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE14, 0); // SPI2_MISO Input
+	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE14, 0); 				// SPI2_MISO Input
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
 //	  15		PA15		-	SPI_MOSI-	LCD
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
-
 
 //	 PORT-C ----------------------------------------------------------------------------------------------------------
 //	!< GPIO port C clock enable
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPCEN);
 
 //	CRH
-//	 13
+//	 13		PC15		-	LED na PCB NANO
 	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
-//	 14
-	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE14, GPIO_CRH_MODE14_0); // 10 Output pin 10MHz
-//	 15
-	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // 10 Output pin 10MHz
+//	 14		PC15		-	Nie u퓓wane
+//	 15		PC15		-	Nie u퓓wane
 
 //     END GPIO ----------------------------------------------------------------------------------------------------------
+
+// SWDIO AFIO_MAPR
+	MODIFY_REG(AFIO->MAPR, AFIO_MAPR_SWJ_CFG , AFIO_MAPR_SWJ_CFG_RESET); // Ustawienie SWJ z resetem
 }
 #endif // Board
 
@@ -290,9 +281,3 @@ unsigned char pot(unsigned int **tab, unsigned int pom)
 
 	return i;
 }
-
-//void Init_Setup(void)
-//{
-//	unsigned char krok;
-//	unsigned int pomiar;
-//}

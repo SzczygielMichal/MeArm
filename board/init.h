@@ -16,7 +16,6 @@
 	void Init_Peripherals(void);
 	void StartUpReason(void);
 
-	void Init_Setup(void);
 	unsigned char pot(unsigned int **tab, unsigned int pom);
 
 #endif

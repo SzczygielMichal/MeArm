@@ -55,50 +55,24 @@ int main(void)
 	Init_RCC();
 	Init_IO();
 	Init_Peripherals();
-//	Init_Setup();
-
 
 	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
 	TimerStart(eTimer_Setup, 100);						// Sprawdzanie
 	TimerStart(eTimer_Potentiometer_Check, 50);
 	TimerUStart(eTimerUS_Dac, 40);
 
-//	Init_Debug();
-//	Init_IWDG();
+	Init_Debug();
+	Init_IWDG();
 
-//	Debug_Intro();
+	Debug_Intro();
 
 	while(1)
 	{
-//		IWDG_Reset();						// Waruj - reset watch doga
-//	    Led_Trig();
-//	    PTC_Handler();						// Obs≥Çuga wejcia czujnika temperatury
-//	    Debug_Handler();					// Obsluga konsoli debugowania
+		IWDG_Reset();						// Waruj - reset watchdoga
+	    Led_Trig();
+	    Debug_Handler();					// Obsluga konsoli debugowania
 	    Potentiometer_Handler();			// Odczyt nastaw potencjometrÛw
-//	    TimeDelayOn_Handler();				// W≥πczenie przzekaünika po odliczonym czasie
-//	    Short_Circuit_Blockade_Handler();	// Blokada doziemienia
-//	    DAC_Handler();
 	}
 	return 0;
 }
 
-//void Debug_Intro (void)
-//{
-//	printf("\033[2J");    // Czyszczenie ekranu
-//	printf("\033[00f");  // Ustawienie kursora
-//	printf("********************************************************************\n\r");
-//	printf("********                  Eltel Sp. z o.o.                  ********\n\r");
-//	printf("********          Katowice 40-312 ul.Milowicka 1E           ********\n\r");
-//	printf("********             www.eltel.katowice.pl                  ********\n\r");
-//	printf("********                  tel. 32-202-78-86                 ********\n\r");
-//	printf("********************************************************************\n\r");
-//	printf("********             \033[33mPrzeka≈∫nik elektroniczny\033[39m               ********\n\r");
-//	printf("********************************************************************\n\r");
-//	printf("********        Data kompilacji:      %14s        ********\n\r", DATE_NOW);
-//	printf("********        Godzina kompilacji:   %14s        ********\n\r", TIME_NOW);
-//	printf("********        Data rewizji:         %14s        ********\n\r", DATE_REV);
-//	printf("********        Godzina rewizji:      %14s        ********\n\r", TIME_REV);
-//	printf("********        Rewizja:              %14d        ********\n\r", REVISION);
-//	printf("********        Wersja Pcb:           %14s        ********\n\r", BOARDREV);
-//	printf("********************************************************************\n\r");
-//}

@@ -108,4 +108,3 @@ void SendUART1(void *Buffer, unsigned short Count)
 
 	USART1->DR = sUART1.TxBuffer[0]; // rozpoczyna transmisje
 }
-
