@@ -149,7 +149,7 @@ void Init_IO(void)
 //	CRH
 //	  8		PA8		-	Nie u¿ywane
 //	  9		PA9		-	USART1_TX
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0)wejscie; // USART1_TX Output pin 10MHz
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); //wejœcie USART1_TX Output pin 10MHz
 	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
 //	 10		PA10	-	USART1_RX
 	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, 0); // USART_RX Input pin
