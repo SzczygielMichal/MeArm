@@ -9,13 +9,13 @@
 #include <inttypes.h>
 #include "stm32f10x.h"
 
-#include "setup\setup.h"
-#include "board\init.h"
-#include "peripherals\adc\adc.h"
-#include "peripherals\uart\uart.h"
-#include "peripherals\timer\timer.h"
+#include "..\setup\setup.h"
+#include "..\board\init.h"
+#include "..\peripherals\adc\adc.h"
+#include "..\peripherals\uart\uart.h"
+#include "..\peripherals\timer\timer.h"
 #include "debug.h"
-#include "board\board.h"
+#include "..\board\board.h"
 //#include "app\version\Version.h"
 
 /*--- FUNKCJE PRYWATNE -------------------------------*/

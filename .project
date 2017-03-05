@@ -3,6 +3,7 @@
 	<name>MeArm</name>
 	<comment></comment>
 	<projects>
+		<project>MeArm</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

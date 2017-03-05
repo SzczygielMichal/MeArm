@@ -240,7 +240,7 @@ void Init_Peripherals(void)
 	InitUART1();          // Konsolka
   
 
-//  Init_ADC();
+	Init_ADC();
 //  InitEXTI();
 
 }

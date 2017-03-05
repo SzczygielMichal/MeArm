@@ -1,6 +1,6 @@
-#include "peripherals\timer\timer.h"
-#include "board\board.h"
-#include "cmsis_lib\include\stm32l1xx_gpio.h"
+#include "..\peripherals\timer\timer.h"
+#include "..\board\board.h"
+#include "stm32f10x_gpio.h"
 
 void Relay_Trig(void)
 {

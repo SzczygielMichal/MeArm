@@ -25,15 +25,15 @@
 #include "stm32f10x_adc.h"
 #include "stm32f10x_dac.h"
 #include "..\setup\setup.h"
-#include "..\app\debug\debug.h"
-#include "..\app\potentiometer\potentiometer.h"
 #include "dbg_ctrl.h"
 #include "main.h"
 
-#include "../app/led/LED.h"
-#include "../peripherals/iwdg/iwdg.h"
-#include "../peripherals/timer/timer.h"
-#include "../peripherals/uart/uart.h"
+#include "..\app\led\LED.h"
+#include "..\app\debug\debug.h"
+#include "..\app\Potentiometer\Potentiometer.h"
+#include "..\peripherals\iwdg\iwdg.h"
+#include "..\peripherals\timer\timer.h"
+#include "..\peripherals\uart\uart.h"
 
 char buffer[100];
 unsigned char x;
@@ -55,7 +55,6 @@ int main(void)
 	Init_RCC();
 	Init_IO();
 	Init_Peripherals();
-//	Init_ADC();
 //	Init_Setup();
 
 
@@ -75,7 +74,7 @@ int main(void)
 //	    Led_Trig();
 //	    PTC_Handler();						// Obs³‚uga wejcia czujnika temperatury
 //	    Debug_Handler();					// Obsluga konsoli debugowania
-//	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
+	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
 //	    TimeDelayOn_Handler();				// W³¹czenie przzekaŸnika po odliczonym czasie
 //	    Short_Circuit_Blockade_Handler();	// Blokada doziemienia
 //	    DAC_Handler();

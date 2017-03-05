@@ -6,7 +6,7 @@
 //#include "STM32F407IG.h"
 #include "..\board\board.h"
 #include "signal.h"
-#include "..\peripherals\timer\timers.h"
+#include "..\peripherals\timer\timer.h"
 //#include "..\app\events\events.h"
 #include "..\peripherals\adc\adc.h"
 
