@@ -2,9 +2,7 @@
 #include "stm32F10x.h"
 #include "stm32F10x_tim.h"
 #include "stm32F10x_rcc.h"
-
 #include "main.h"
-
 #include "..\StdPeriph_Driver\inc\misc.h"
 
 void Timer_Handler(void);
@@ -24,7 +22,7 @@ unsigned int TimerCS;
 //
 //  TIM4  - Do wyzwalania (TRIGGER) ADC;
 //
-//  TIM3  - PWM CH1 pin PC6 do generowania SYGNALOW porozumiewawczych
+//  TIM3  - PWM CH1 - CH4 do generowania sygna³ów dla SERW
 //  TIM5  - PWM Odmierzanie 2ms
 //
 //  TIM9  - TR1 Timer do transmisji oraz Timeout-Synchronizacja

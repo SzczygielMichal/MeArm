@@ -8,8 +8,6 @@
   ******************************************************************************
 */
 
-#include <board.h>
-#include <init.h>
 #include "stm32f10x.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -24,10 +22,11 @@
 #include "stm32f10x_usart.h"
 #include "stm32f10x_adc.h"
 #include "stm32f10x_dac.h"
-#include "..\setup\setup.h"
-#include "dbg_ctrl.h"
 #include "main.h"
 
+#include "..\setup\setup.h"
+#include "..\board\board.h"
+#include "..\board\init.h"
 #include "..\app\led\LED.h"
 #include "..\app\debug\debug.h"
 #include "..\app\Potentiometer\Potentiometer.h"
@@ -50,8 +49,6 @@ int main(void)
 	op = 0;
 	setvbuf(stdout, NULL, _IONBF, 0); // Wy��czenie buforowania  tekstu drukowanego przez printf
 
-	StartUpReason();
-
 	Init_RCC();
 	Init_IO();
 	Init_Peripherals();
@@ -59,7 +56,6 @@ int main(void)
 	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
 	TimerStart(eTimer_Setup, 100);						// Sprawdzanie
 	TimerStart(eTimer_Potentiometer_Check, 50);
-	TimerUStart(eTimerUS_Dac, 40);
 
 	Init_Debug();
 	Init_IWDG();

@@ -295,7 +295,7 @@ unsigned char LoginToConsole_CheckPassword(unsigned char *string)
 
 unsigned char SetupPrint(unsigned char *string)
 {
-	unsigned int i_nom_c, i_nom_p, short_circuit_current_c, short_circuit_current_p;
+//	unsigned int i_nom_c, i_nom_p, short_circuit_current_c, short_circuit_current_p;
 	printf("\033[2J");
 	printf("\033[0;0f");
 

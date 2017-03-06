@@ -32,19 +32,18 @@
   */
 //#define TIMEn				11
 //#define TIME_PIN			((uint16_t)0x0800)  /*!< Pin 11 selected port B*/
-//#define TIME_GPIO_PORT		GPIOB
-//#define TIME_ON				GPIOB->ODR |=  (1<<11)
+//#define TIME_GPIO_PORT	GPIOB
+//#define TIME_ON			GPIOB->ODR |=  (1<<11)
 //#define TIME_OFF			GPIOB->ODR &= ~(1<<11)
 /**
   * @}
   */
 
-// Sterowanie przekaÅºnikiem elektronicznym na wejsciu toru pomiaru prÄ…du obciÄ…Å¼enia silnika
 //
 //	Pozostawione dla przyk³adu gdybym chcia³ sterowac wyjœciami binarnymi
 //
 
-//#define CURRENT_COM_NO    WRITE_REG(GPIOA->BSRRL, (uint16_t)(GPIO_BSRR_BS_8))       // SET_bit lo_reg
-//#define CURRENT_COM_NC    WRITE_REG(GPIOA->BSRRH, (uint16_t)(GPIO_BSRR_BR_8 >> 16)) // RST_bit hi_reg
+#define CURRENT_COM_NO    WRITE_REG(GPIOA->BSRRL, (uint16_t)(GPIO_BSRR_BS_8))       // SET_bit lo_reg
+#define CURRENT_COM_NC    WRITE_REG(GPIOA->BSRRH, (uint16_t)(GPIO_BSRR_BR_8 >> 16)) // RST_bit hi_reg
 
 #endif	//BOARD_V_26_02_2016_H

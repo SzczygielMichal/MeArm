@@ -51,19 +51,17 @@
 
 #include <stdio.h>
 #include "main.h"
-#include "init.h"
-#include "..\board\init.h"
-#include "..\board\board_v_26_02_2017.h"
 #include "stm32f10x.h"
 #include "stm32f10x_gpio.h"
-#include "..\setup\setup.h"
 #include "..\StdPeriph_Driver\inc\misc.h"
 #include "..\StdPeriph_Driver\inc\stm32f10x_adc.h"
-#include "dbg_ctrl.h"
+#include "..\peripherals\timer\timer.h"
+#include "..\peripherals\uart\uart.h"
+#include "..\peripherals\adc\adc.h"
+#include "..\setup\setup.h"
+#include "..\board\init.h"
+#include "..\board\board_v_26_02_2017.h"
 
-#include "../peripherals/timer/timer.h"
-#include "../peripherals/uart/uart.h"
-#include "../peripherals/adc/adc.h"
 unsigned int i_nom, mull;
 unsigned char i, tmp;
 
@@ -78,12 +76,7 @@ void Init_RCC(void)
 	/** W³¹czenie zasilania interfejsu zegara */
 	SET_BIT(RCC->APB1ENR, RCC_APB1ENR_PWREN);
 
-	//  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLMUL, RCC_CFGR_PLLMUL16);     // Mnoï¿½nik  /16	- Narazie moï¿½e zostaï¿½
-	//  MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLDIV, RCC_CFGR_PLLDIV2);     // Dzielnik /2	- Narazie moï¿½e zostaï¿½
-	MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLSRC, RCC_CFGR_PLLSRC_HSE);  // ï¿½rï¿½dï¿½o   HSE	- Narazie moï¿½e zostaï¿½
-  
-	//  SET_BIT(FLASH->ACR, FLASH_ACR_ACC64);                         // Wlaczenie obslugi 64bit odczytu flash
-	//  SET_BIT(FLASH->ACR, FLASH_ACR_LATENCY | FLASH_ACR_PRFTEN);    // 1WaitState + Prefetch enabled
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_PLLSRC, RCC_CFGR_PLLSRC_HSE);  // wybór HSE jako Ÿród³a PLL bez dzielnika
 
 	/** W³¹cz Kwarc */
 	SET_BIT(RCC->CR, RCC_CR_HSEON);
@@ -97,10 +90,10 @@ void Init_RCC(void)
 
 	/** Prze³¹cz zegar systemowy na PLL */
 	MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL);
-	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL){}       // Sprawdï¿½ czy PLL // do 3 taktï¿½w chyba
+	while((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL){}       // SprawdŸ czy PLL OK
 
-	MODIFY_REG(RCC->CFGR, RCC_CFGR_HPRE,  RCC_CFGR_HPRE_DIV1);    // AHB  /1  magistrala systemowa HCLK = 32MHz Systick = 4000
-	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE1, RCC_CFGR_PPRE1_DIV1);   // APB1 /1  magistrala peryferiï¿½w PCLK1 = 32MHz
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_HPRE,  RCC_CFGR_HPRE_DIV1);    // AHB  /1  magistrala systemowa HCLK = 72MHz Systick = 4000
+	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE1, RCC_CFGR_PPRE1_DIV2);   // APB1 /2  magistrala peryferiï¿½w PCLK1 = 36MHz
 	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE2, RCC_CFGR_PPRE2_DIV1);   // APB2 /1  magistrala peryferiï¿½w PCLK2 = 32MHz
 }
 
@@ -217,7 +210,6 @@ void Init_IO(void)
 }
 #endif // Board
 
-
 void Init_Peripherals(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -229,55 +221,7 @@ void Init_Peripherals(void)
 //  Init_TIM5();
 
 	InitUART1();          // Konsolka
-  
 
 	Init_ADC();
 //  InitEXTI();
-
-}
-
-void StartUpReason(void)
-{
-//  unsigned int temp = RCC->CSR;
-  
-	sMeArm.statusS.startUpS.Entire = 0;
-
-	if(RCC->CSR & RCC_CSR_LPWRRSTF)
-	{
-		sMeArm.statusS.startUpS.LowPowerReset = 1;
-	}
-	if(RCC->CSR & RCC_CSR_IWDGRSTF)
-	{
-		sMeArm.statusS.startUpS.IwdgReset = 1;
-	}
-	if(RCC->CSR & RCC_CSR_SFTRSTF)
-	{
-		sMeArm.statusS.startUpS.SoftReset = 1;
-	}
-	if(RCC->CSR & RCC_CSR_PORRSTF)
-	{
-		sMeArm.statusS.startUpS.PdrReset = 1;
-	}
-	if(RCC->CSR & RCC_CSR_PINRSTF)
-	{
-		sMeArm.statusS.startUpS.PinReset = 1;
-	}
-
-	TimerLowSpeedStart(eTimerLowSpeed_StartUp, 50);
-}
-
-unsigned char pot(unsigned int **tab, unsigned int pom)
-{
-	char i = 0;
-	unsigned int min, max;
-
-	do
-	{
-		max = (unsigned int)*tab;
-		min = (unsigned int)*(tab+1);
-		tab += 2;
-		i++;
-	}while(!((max > pom) && (min <= pom)));
-
-	return i;
 }
