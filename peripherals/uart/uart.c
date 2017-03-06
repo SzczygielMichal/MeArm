@@ -4,7 +4,7 @@
 #include "main.h"
 #include "stm32f10x.h"
 #include "..\board\board.h"    // Date 26.02.2017
-#include "..\peripherals\dma\dma.h"
+//#include "..\peripherals\dma\dma.h"
 #include "..\app\debug\debug.h"
 #include "..\StdPeriph_Driver\inc\misc.h"
 #include "..\timer\timer.h"
