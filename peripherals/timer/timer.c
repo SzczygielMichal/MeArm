@@ -15,22 +15,20 @@ signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
 
 unsigned int TimerCS;
 
-//--- WYKORZYSTANIE TIMERï¿½W -----------------------------------------------------
+//--- WYKORZYSTANIE TIMERÓW -----------------------------------------------------
 //
 //  TIM2  - Odmierzanie 1ms
 //  TIM7  - Odmierzanie 100ms
 //
-//  TIM4  - Do wyzwalania (TRIGGER) ADC;
+//  TIM4  - Odmierzanie 100us - do wyzwalania (TRIGGER) ADC
 //
 //  TIM3  - PWM CH1 - CH4 do generowania sygna³ów dla SERW
-//  TIM5  - PWM Odmierzanie 2ms
 //
 //  TIM9  - TR1 Timer do transmisji oraz Timeout-Synchronizacja
 //
 //  TIM10 - TR2 Timeout-Synchronizacja
 //  TIM11 - TR2 Timer do transmisji
 //
-//  TIM6  - Transmisja z AKU
 //-----------------------------------------------------------------------------
 
 /** 
@@ -67,12 +65,11 @@ void Init_Timer(void)
   SET_BIT(RCC->APB1ENR , RCC_APB1ENR_TIM2EN); // wlacz zegar dla timera 1ms
   
   WRITE_REG(TIM2->CNT, 0x0000);
-  WRITE_REG(TIM2->ARR, 0x7D00);  //
-  WRITE_REG(TIM2->PSC, 0x00); 	// /(Value +1) = 1 - prescaler wyï¿½ï¿½czony
+  WRITE_REG(TIM2->ARR, 0x7D00);		// Nale¿y wpisac wartoœc potrzebn¹ do uzyskania czasu 1ms -NIE DZIA£A DLA Fck = 72MHZ
+  WRITE_REG(TIM2->PSC, 0x0001);		//(Value + 1) = 2 - prescaler
 
   SET_BIT(TIM2->DIER, TIM_DIER_UIE);         // wlacz przerwanie przepelnienia licznika
   SET_BIT(TIM2->CR1,  TIM_CR1_CEN);          // wlacz timer; bit DIR domyslnie 0 zliczanie w gore
-
 
   for(i = 0; i < eNumberOfTimers; i++) Timer_ms[i] = TIMER_OFF;
 }
@@ -117,10 +114,8 @@ void Init_LowSpeedTimer(void) // Timer ms
 void Timer_Handler(void)
 {  
 	if(Timer_ms[eTimer_Test] > 0)					Timer_ms[eTimer_Test]--;
-	if(Timer_ms[eTimer_Setup] > 0)					Timer_ms[eTimer_Setup]--;
 	if(Timer_ms[eTimer_Potentiometer_Check] > 0)	Timer_ms[eTimer_Potentiometer_Check]--;
 	if(Timer_ms[eTimer_Adc] > 0)					Timer_ms[eTimer_Adc]--;
-	if(Timer_ms[eTimer_InterruptConnection]> 0)		Timer_ms[eTimer_InterruptConnection]--;
 	if(Timer_ms[eTimer_AppsTick] > 0)				Timer_ms[eTimer_AppsTick]--;
 
 	if(TimerCS < 0xFFFFFFFF) TimerCS++;
@@ -131,11 +126,8 @@ void Timer_Handler(void)
  */
 void TimerLowSpeed_Handler(void)
 {
-  if(Timer_ls[eTimerLowSpeed_StartUp] > 0)          Timer_ls[eTimerLowSpeed_StartUp]--;
   if(Timer_ls[eTimerLowSpeed_Test] > 0)     		Timer_ls[eTimerLowSpeed_Test]--;
   if(Timer_ls[eTimerLowSpeed_Led] > 0)       		Timer_ls[eTimerLowSpeed_Led]--;
-  if(Timer_ls[eTimerLowSpeed_Reset] > 0)            Timer_ls[eTimerLowSpeed_Reset]--;
-  if(Timer_ls[eTimerLowSpeed_TimeDelayOn] > 0)		Timer_ls[eTimerLowSpeed_TimeDelayOn]--;
 }
 
 /** 
@@ -143,8 +135,7 @@ void TimerLowSpeed_Handler(void)
  */
 void TimerUS_Handler(void)
 {
-//  if(Timer_us[eTimerUS_Adc] > 0)               Timer_us[eTimerUS_Adc]--;
-  if(Timer_us[eTimerUS_Dac] > 0)               Timer_us[eTimerUS_Dac]--;
+  if(Timer_us[eTimerUS_Adc] > 0)               Timer_us[eTimerUS_Adc]--;
 }
 
 

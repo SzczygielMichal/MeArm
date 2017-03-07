@@ -54,7 +54,6 @@ int main(void)
 	Init_Peripherals();
 
 	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
-	TimerStart(eTimer_Setup, 100);						// Sprawdzanie
 	TimerStart(eTimer_Potentiometer_Check, 50);
 
 	Init_Debug();

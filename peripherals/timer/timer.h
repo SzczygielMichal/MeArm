@@ -12,10 +12,8 @@ enum eTimer		// Timer 1ms
 	eTimer_LED,
 	eTimer_Adc,
 	eTimer_Key,
-	eTimer_Setup,
 	eTimer_Test	,
 	eTimer_Potentiometer_Check,
-	eTimer_InterruptConnection,
 	eTimer_AppsTick,
 	/*-----------------------------*/
 	eNumberOfTimers
@@ -23,10 +21,8 @@ enum eTimer		// Timer 1ms
 
 enum eTimerLowSpeed		// Timer 100ms
 {
-	eTimerLowSpeed_StartUp,
 	eTimerLowSpeed_Test,
 	eTimerLowSpeed_Led,
-	eTimerLowSpeed_Reset,
 	eTimerLowSpeed_TimeDelayOn,
 	/*-----------------------------*/
 	eNumberOfLowSpeedTimers
@@ -35,7 +31,6 @@ enum eTimerLowSpeed		// Timer 100ms
 enum eTimerFastSpeed		// Timer 100us
 {
   eTimerUS_Adc,
-  eTimerUS_Dac,
 /*-----------------------------*/
   eNumberOfUSTimers
 };
