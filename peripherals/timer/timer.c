@@ -116,6 +116,7 @@ void Timer_Handler(void)
 	if(Timer_ms[eTimer_Test] > 0)					Timer_ms[eTimer_Test]--;
 	if(Timer_ms[eTimer_Potentiometer_Check] > 0)	Timer_ms[eTimer_Potentiometer_Check]--;
 	if(Timer_ms[eTimer_Adc] > 0)					Timer_ms[eTimer_Adc]--;
+	if(Timer_ms[eTimer_LED] > 0)					Timer_ms[eTimer_LED]--;
 	if(Timer_ms[eTimer_AppsTick] > 0)				Timer_ms[eTimer_AppsTick]--;
 
 	if(TimerCS < 0xFFFFFFFF) TimerCS++;
@@ -220,7 +221,7 @@ void TIM2_IRQHandler(void)
   * @retval   None
   * @details  TIM7 - timer to counts 100ms
   */
-void TIM7_IRQHandler(void) // timer 100ms
+void TIM3_IRQHandler(void) // timer 100ms
 {
   TimerLowSpeed_Handler();
   

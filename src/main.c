@@ -53,20 +53,20 @@ int main(void)
 	Init_IO();
 	Init_Peripherals();
 
-	TimerLowSpeedStart(eTimerLowSpeed_Led, 10);			// Miganie LED6 co 1s
-	TimerStart(eTimer_Potentiometer_Check, 50);
+	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
+//	TimerStart(eTimer_Potentiometer_Check, 50);
 
-	Init_Debug();
-	Init_IWDG();
+//	Init_Debug();
+//	Init_IWDG();
 
-	Debug_Intro();
+//	Debug_Intro();
 
 	while(1)
 	{
-		IWDG_Reset();						// Waruj - reset watchdoga
+//		IWDG_Reset();						// Waruj - reset watchdoga
 	    Led_Trig();
-	    Debug_Handler();					// Obsluga konsoli debugowania
-	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
+//	    Debug_Handler();					// Obsluga konsoli debugowania
+//	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
 	}
 	return 0;
 }

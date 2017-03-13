@@ -6,9 +6,9 @@ void Led_Trig(void)
 {
 	static char x = 0;
 
-	if(TimerLowSpeedStatus(eTimerLowSpeed_Led) == TIMER_END)
+	if(TimerStatus(eTimer_LED) == TIMER_END)
 	{
-		TimerLowSpeedStart(eTimerLowSpeed_Led, 10); // Timer 100ms
+		TimerStart(eTimer_LED, 1000); // Timer 100ms
 		if(x == 0)
 		{
 			LED_OFF;
