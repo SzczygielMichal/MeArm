@@ -215,13 +215,8 @@ void Init_Peripherals(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
 	Init_Timer();         // 1ms
-	Init_LowSpeedTimer(); // 100ms
-	Init_FastSpeedTimer();// 100us
-   
-//  Init_TIM5();
-
 	InitUART1();          // Konsolka
 
-	Init_ADC();
+//	Init_ADC();
 //  InitEXTI();
 }

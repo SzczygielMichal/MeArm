@@ -1,9 +1,6 @@
 #include "main.h"
 #include "stm32f10x_iwdg.h"
 
-void Init_IWDG(void);
-void IWDG_Reset(void);
-
 void Init_IWDG(void)
 {
   IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
