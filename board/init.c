@@ -158,49 +158,49 @@ void Init_IO(void)
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN);
 
 //	CRL
-//	  0   	PB0		-	TIM3	-	PWM Channel 3
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // PWM Output pin 10MHz
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF0, GPIO_CRL_CNF0_1);	// Alternate function push-pull
-//	  1		PB1		-	TIM3	-	PWM Channel 4
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE1, GPIO_CRL_MODE1_0); // PWM Output pin 10MHz
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF1, GPIO_CRL_CNF1_1);	// Alternate function push-pull
-//    2		PB2		-	Nie u퓓wane
-//	  3		PB3		-	Nie u퓓wane
-//	  4		PB4		-	TIM3	-	PWM Channel 1
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE4, GPIO_CRL_MODE4_0); // PWM Output pin 10MHz
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF4, GPIO_CRL_CNF4_1);	// Alternate function push-pull
-//	  5		PB5		-	TIM3	-	PWM Channel 0
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE5, GPIO_CRL_MODE5_0); // PWM Output pin 10MHz
-	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF5, GPIO_CRL_CNF5_1);	// Alternate function push-pull
+//	  0   	PB0	-	Nie u퓓wane
+//	  1		PB1	-	Nie u퓓wane
+//    2		PB2	-	Nie u퓓wane
+//	  3		PB3	-	Nie u퓓wane
+//	  4		PB4	-	Nie u퓓wane
+//	  5		PB5	-	Nie u퓓wane
 //	  6		PB6	-	Nie u퓓wane
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF6, GPIO_CRL_CNF6_1);	// Alternate function push-pull
 //	  7		PB7	-	Nie u퓓wane
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF7, GPIO_CRL_CNF7_1);	// Alternate function push-pull
 
 	//	CRH
 //	  8		PB8	-	Nie u퓓wane
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF8, GPIO_CRH_CNF8_1);	// Alternate function push-pull
 //	  9		PB9	-	Nie u퓓wane
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // PWM Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
 //	  10	PB10-	Nie u퓓wane
 //	  11	PB11-	Nie u퓓wane
 //	  12	PB12-	SPI_NSS	-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_NSS Output pin 10MHz
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_NSS Output pin 10MHz
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
 //	  13		PB13	-	SPI_SCK	-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
 //	  14		PA14		-	SPI_MISO-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE14, 0); 				// SPI2_MISO Input
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE14, 0); 				// SPI2_MISO Input
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
 //	  15		PA15		-	SPI_MOSI-	LCD
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
 
 //	 PORT-C ----------------------------------------------------------------------------------------------------------
 //	!< GPIO port C clock enable
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPCEN);
 
 //	CRH
-//	 13		PC15		-	LED na PCB NANO
+//	 13		PC13		-	LED na PCB NANO
 	MODIFY_REG(GPIOC->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // 10 Output pin 10MHz
-//	 14		PC15		-	Nie u퓓wane
+//	 14		PC14		-	Nie u퓓wane
 //	 15		PC15		-	Nie u퓓wane
 
 //     END GPIO ----------------------------------------------------------------------------------------------------------
@@ -214,8 +214,9 @@ void Init_Peripherals(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
-	Init_Timer();         // 1ms
-	InitUART1();          // Konsolka
+	Init_Timer();       // 1ms
+	Init_PWMTimer();	// Generowanie sygna퀅 PWM na wyj쐁iach B0, B1, B4, B5
+	InitUART1();        // Konsolka
 
 //	Init_ADC();
 //  InitEXTI();

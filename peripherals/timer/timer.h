@@ -66,7 +66,6 @@ extern signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
 void TIM_Config(void);
 
 void Init_Timer(void);
-void Init_LowSpeedTimer(void);
-void Init_FastSpeedTimer(void);
+void Init_PWMTimer(void);
 
 #endif

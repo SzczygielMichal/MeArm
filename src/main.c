@@ -53,7 +53,7 @@ int main(void)
 	Init_IO();
 	Init_Peripherals();
 
-	TimerStart(eTimer_LED, 250);			// Miganie LED6 co 1s
+	TimerStart(eTimer_LED, 100);			// Miganie LED6 co 1s
 //	TimerStart(eTimer_Potentiometer_Check, 50);
 
 //	Init_Debug();
