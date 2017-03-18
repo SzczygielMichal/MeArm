@@ -205,8 +205,6 @@ void Init_IO(void)
 
 //     END GPIO ----------------------------------------------------------------------------------------------------------
 
-// SWDIO AFIO_MAPR
-	MODIFY_REG(AFIO->MAPR, AFIO_MAPR_SWJ_CFG , AFIO_MAPR_SWJ_CFG_RESET); // Ustawienie SWJ z resetem
 }
 #endif // Board
 
