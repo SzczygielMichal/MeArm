@@ -57,7 +57,7 @@ int main(void)
 //	TimerStart(eTimer_Potentiometer_Check, 50);
 
 //	Init_Debug();
-	Init_IWDG();
+
 
 //	Debug_Intro();
 

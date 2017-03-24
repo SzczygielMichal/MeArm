@@ -83,7 +83,6 @@
   
   void InitUART1(void);
   void SendUART1(void *Buffer, unsigned short Count);
-  void InitUART1(void);
   void USART1_IRQHandler(void);
   
 #endif

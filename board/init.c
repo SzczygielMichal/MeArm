@@ -215,7 +215,7 @@ void Init_Peripherals(void)
 	Init_Timer();       // 1ms
 	Init_PWMTimer();	// Generowanie sygna³u PWM na wyjœciach B0, B1, B4, B5
 	InitUART1();        // Konsolka
-
+	Init_IWDG();		// WatchDog
 //	Init_ADC();
-//  InitEXTI();
+	InitEXTI();
 }

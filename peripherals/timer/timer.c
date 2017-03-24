@@ -1,7 +1,7 @@
 #include "timer.h"
-#include "stm32F10x.h"
-#include "stm32F10x_tim.h"
-#include "stm32F10x_rcc.h"
+#include "stm32f10x.h"
+#include "stm32f10x_tim.h"
+#include "stm32f10x_rcc.h"
 #include "main.h"
 #include "..\StdPeriph_Driver\inc\misc.h"
 

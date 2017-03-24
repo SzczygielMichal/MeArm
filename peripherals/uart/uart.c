@@ -13,7 +13,7 @@ struct specialUART  sUART1;
 
 
 /** 
- *  TRANSMISJA Z KONSOLĄ
+ *  TRANSMISJA Z KONSOL�
  */
 void USART1_IRQHandler(void)
 {
@@ -69,7 +69,7 @@ void InitUART1(void)
   // Prędkosć 115200
 //  MODIFY_REG(USART1->BRR, USART_BRR_DIV_MANTISSA, 16 << USART_BRR_DIV_Mantissa_BIT);
 //  MODIFY_REG(USART1->BRR, USART_BRR_DIV_FRACTION, 16 << USART_BRR_DIV_Mantissa_BIT);
-  USART1->BRR = (0x11 << 4) + 6;
+  USART1->BRR = (0x27 << 4) + 1;
   
   USART1->SR = 0;
   sUART1.RxCount = 0;
