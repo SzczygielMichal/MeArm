@@ -58,6 +58,8 @@
 #include "..\peripherals\timer\timer.h"
 #include "..\peripherals\uart\uart.h"
 #include "..\peripherals\adc\adc.h"
+#include "..\peripherals\exti\exti.h"
+#include "..\peripherals\iwdg\iwdg.h"
 #include "..\setup\setup.h"
 #include "..\board\init.h"
 #include "..\board\board_v_26_02_2017.h"
