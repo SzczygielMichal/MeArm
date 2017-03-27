@@ -35,7 +35,7 @@
 #include "..\peripherals\uart\uart.h"
 
 char buffer[100];
-unsigned char x;
+unsigned int x = 1000;
 char op;
 unsigned int we;
 unsigned char wynik;
@@ -53,7 +53,7 @@ int main(void)
 	Init_IO();
 	Init_Peripherals();
 
-	TimerStart(eTimer_LED, 100);			// Miganie LED6 co 1s
+	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
 //	TimerStart(eTimer_Potentiometer_Check, 50);
 
 //	Init_Debug();
@@ -67,6 +67,7 @@ int main(void)
 	    Led_Trig();
 //	    Debug_Handler();					// Obsluga konsoli debugowania
 //	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
+
 	}
 	return 0;
 }

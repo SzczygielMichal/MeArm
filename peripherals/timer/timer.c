@@ -78,16 +78,24 @@ void Init_PWMTimer(void) // Timer ms
 	NVIC_Init(&NVICC);
 
 	TIM4->ARR = 1000-1;
-	TIM4->PSC = 72-1;
+	TIM4->PSC = 2*720-1;
 
 	TIM4->CCMR1 |= TIM_OCMode_PWM2<<8 | TIM_OCMode_PWM2;
 	TIM4->CCMR2 |= TIM_OCMode_PWM2<<8 | TIM_OCMode_PWM2;
-	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable<<8 | TIM_OutputState_Enable<<4 | TIM_OutputState_Enable;
+//	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable<<8 | TIM_OutputState_Enable<<4 | TIM_OutputState_Enable;
+	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable;
 
-	TIM4->CCR1 = 1;
-	TIM4->CCR2 = 350;
-	TIM4->CCR3 = 650;
-	TIM4->CCR4 = 999;
+//	CCR = 100 - 18ms
+//	CCR = 975 - 0,5ms
+//	CCR = 950 - 1,0ms	- +45 stopni
+//	CCR = 925 - 1,5ms	- 0 stopni - stan wyjœciowy
+//	CCR = 900 - 2,0ms	- -45 stopni
+//	CCR = 875 - 2,5ms
+
+	TIM4->CCR1 = 925;
+	TIM4->CCR2 = 1000;
+	TIM4->CCR3 = 1000;
+	TIM4->CCR4 = 925;
 
 	TIM4->CR1 |= TIM_CR1_CEN;
 
