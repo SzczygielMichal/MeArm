@@ -22,7 +22,7 @@ unsigned int TimerCS;
 /** 
  *  \brief Init Timer 1ms
  */
-void Init_Timer(void) 
+void Init_Timer2(void)
 {
   unsigned char i;
 
@@ -86,11 +86,11 @@ void Init_PWMTimer(void) // Timer ms
 	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable;
 
 //	CCR = 100 - 18ms
-//	CCR = 975 - 0,5ms
+//	CCR = 975 - 0,5ms	- +90 stopni - wartoœc maksymalna w prawo
 //	CCR = 950 - 1,0ms	- +45 stopni
 //	CCR = 925 - 1,5ms	- 0 stopni - stan wyjœciowy
 //	CCR = 900 - 2,0ms	- -45 stopni
-//	CCR = 875 - 2,5ms
+//	CCR = 875 - 2,5ms	- -90 stopni - wartoœc maksymalna w lewo
 
 	TIM4->CCR1 = 925;
 	TIM4->CCR2 = 1000;
@@ -105,13 +105,17 @@ void Init_PWMTimer(void) // Timer ms
 /** 
  *  \brief Timer_Handler 1ms
  */
-void Timer_Handler(void)
+void Timer2_Handler(void)
 {  
 	if(Timer_ms[eTimer_Test] > 0)					Timer_ms[eTimer_Test]--;
 	if(Timer_ms[eTimer_Potentiometer_Check] > 0)	Timer_ms[eTimer_Potentiometer_Check]--;
 	if(Timer_ms[eTimer_Adc] > 0)					Timer_ms[eTimer_Adc]--;
 	if(Timer_ms[eTimer_LED] > 0)					Timer_ms[eTimer_LED]--;
 	if(Timer_ms[eTimer_AppsTick] > 0)				Timer_ms[eTimer_AppsTick]--;
+	if(Timer_ms[eTimer_Servo_1] > 0)				Timer_ms[eTimer_Servo_1]--;
+	if(Timer_ms[eTimer_Servo_2] > 0)				Timer_ms[eTimer_Servo_2]--;
+	if(Timer_ms[eTimer_Servo_3] > 0)				Timer_ms[eTimer_Servo_3]--;
+	if(Timer_ms[eTimer_Servo_4] > 0)				Timer_ms[eTimer_Servo_4]--;
 
 	if(TimerCS < 0xFFFFFFFF) TimerCS++;
 }
@@ -128,7 +132,7 @@ void Timer_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
-  Timer_Handler();
+  Timer2_Handler();
 
   CLEAR_BIT(TIM2->SR, TIM_SR_UIF);
   NVIC_ClearPendingIRQ(TIM2_IRQn);

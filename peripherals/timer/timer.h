@@ -15,6 +15,10 @@ enum eTimer		// Timer 1ms
 	eTimer_Test	,
 	eTimer_Potentiometer_Check,
 	eTimer_AppsTick,
+	eTimer_Servo_1,
+	eTimer_Servo_2,
+	eTimer_Servo_3,
+	eTimer_Servo_4,
 	/*-----------------------------*/
 	eNumberOfTimers
 };
@@ -65,7 +69,7 @@ extern signed int Timer_ls[eNumberOfLowSpeedTimers];  // 100ms
 
 void TIM_Config(void);
 
-void Init_Timer(void);
+void Init_Timer2(void);
 void Init_PWMTimer(void);
 
 #endif

@@ -47,7 +47,7 @@ int main(void)
 	// Zmienne globalne
 	//
 	op = 0;
-	setvbuf(stdout, NULL, _IONBF, 0); // Wyï¿½ï¿½czenie buforowania  tekstu drukowanego przez printf
+	setvbuf(stdout, NULL, _IONBF, 0); // Wy³¹czenie buforowania tekstu drukowanego przez printf
 
 	Init_RCC();
 	Init_IO();
@@ -56,7 +56,7 @@ int main(void)
 	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
 //	TimerStart(eTimer_Potentiometer_Check, 50);
 
-//	Init_Debug();
+	Init_Debug();
 
 
 //	Debug_Intro();
@@ -64,8 +64,8 @@ int main(void)
 	while(1)
 	{
 		IWDG_Reset();						// Waruj - reset watchdoga
-	    Led_Trig();
-//	    Debug_Handler();					// Obsluga konsoli debugowania
+//	    Led_Trig();
+	    Debug_Handler();					// Obsluga konsoli debugowania
 //	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
 
 	}
