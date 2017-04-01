@@ -37,6 +37,7 @@
 char buffer[100];
 unsigned int x = 1000;
 char op;
+char dir = 0;
 unsigned int we;
 unsigned char wynik;
 struct _sMeArm sMeArm;
@@ -54,19 +55,41 @@ int main(void)
 	Init_Peripherals();
 
 	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
-//	TimerStart(eTimer_Potentiometer_Check, 50);
+	TimerStart(eTimer_Servo_1, 1000);			// Miganie LED6 co 1s
 
 	Init_Debug();
 
 
-//	Debug_Intro();
+	Debug_Intro();
 
 	while(1)
 	{
 		IWDG_Reset();						// Waruj - reset watchdoga
+<<<<<<< .mine
+	    Led_Trig();
+	    Debug_Handler();					// Obsluga konsoli debugowania
+||||||| .r32
+	    Led_Trig();
+//	    Debug_Handler();					// Obsluga konsoli debugowania
+=======
 //	    Led_Trig();
 	    Debug_Handler();					// Obsluga konsoli debugowania
+>>>>>>> .r33
 //	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
+		if(TimerStatus(eTimer_Servo_1) == TIMER_END)
+		{
+			TimerStart(eTimer_Servo_1, 1000); // Timer 100ms
+			if(dir)
+			{
+				TIM4->CCR1 = 975;
+				dir = 0;
+			}
+			else
+			{
+				TIM4->CCR1 = 875;
+				dir = 1;
+			}
+		}
 
 	}
 	return 0;
