@@ -144,11 +144,11 @@ void Init_IO(void)
 //	CRH
 //	  8		PA8		-	Nie u¿ywane
 //	  9		PA9		-	USART1_TX
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); //wejœcie USART1_TX Output pin 10MHz
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_1);	// USART1_TX Output pin 10MHz
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);		// Alternate function push-pull
 //	 10		PA10	-	USART1_RX
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, 0); // USART_RX Input pin
-	MODIFY_REG(GPIOA->CRL, GPIO_CRH_CNF10, GPIO_CRH_CNF9_1);	// Input floating / Input pull-up
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE10, 0); 				// USART_RX Input pin
+	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF10, GPIO_CRH_CNF10_1);	// Input floating / Input pull-up
 //	 11		PA11	-	USB_DM	-	Aktualnie nie u¿ywane
 //	 12		PA12	-	USB_DP	-	Aktualnie nie u¿ywane
 //	 13		PA13	-	SWDIO
@@ -214,7 +214,7 @@ void Init_Peripherals(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
 
-	Init_Timer2();       // 1ms
+	Init_Timer2();      // 1ms
 	Init_PWMTimer();	// Generowanie sygna³u PWM na wyjœciach B0, B1, B4, B5
 	InitUART1();        // Konsolka
 	Init_IWDG();		// WatchDog

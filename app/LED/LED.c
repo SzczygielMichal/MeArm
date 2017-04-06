@@ -8,8 +8,8 @@ void Led_Trig(void)
 
 	if(TimerStatus(eTimer_LED) == TIMER_END)
 	{
-		TimerStart(eTimer_LED, 100); // Timer 100ms
-		if(x == 0)
+		TimerStart(eTimer_LED, 1000); // Timer 100ms
+		if(!x)
 		{
 			LED_OFF;
 			x = 1;

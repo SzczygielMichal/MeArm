@@ -23,6 +23,7 @@
 #include "stm32f10x_adc.h"
 #include "stm32f10x_dac.h"
 #include "main.h"
+#include "dbg_ctrl.h"
 
 #include "..\setup\setup.h"
 #include "..\board\board.h"
@@ -36,8 +37,9 @@
 
 char buffer[100];
 unsigned int x = 1000;
-char op;
+char op = 0;
 char dir = 0;
+unsigned int krok;
 unsigned int we;
 unsigned char wynik;
 struct _sMeArm sMeArm;
@@ -47,51 +49,69 @@ int main(void)
 	//
 	// Zmienne globalne
 	//
-	op = 0;
+
 	setvbuf(stdout, NULL, _IONBF, 0); // Wy≥πczenie buforowania tekstu drukowanego przez printf
 
 	Init_RCC();
 	Init_IO();
 	Init_Peripherals();
 
-	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
-	TimerStart(eTimer_Servo_1, 1000);			// Miganie LED6 co 1s
+//	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
+	TimerStart(eTimer_Key, 500);			// Miganie LED6 co 1s
 
 	Init_Debug();
-
-
 	Debug_Intro();
 
 	while(1)
 	{
 		IWDG_Reset();						// Waruj - reset watchdoga
-<<<<<<< .mine
-	    Led_Trig();
-	    Debug_Handler();					// Obsluga konsoli debugowania
-||||||| .r32
-	    Led_Trig();
-//	    Debug_Handler();					// Obsluga konsoli debugowania
-=======
 //	    Led_Trig();
 	    Debug_Handler();					// Obsluga konsoli debugowania
->>>>>>> .r33
 //	    Potentiometer_Handler();			// Odczyt nastaw potencjometrÛw
-		if(TimerStatus(eTimer_Servo_1) == TIMER_END)
+
+/*		if(TimerStatus(eTimer_Servo_1) == TIMER_END)
 		{
 			TimerStart(eTimer_Servo_1, 1000); // Timer 100ms
 			if(dir)
 			{
-				TIM4->CCR1 = 975;
+				TIM4->CCR1 = 970;
+				TIM4->CCR2 = 970;
+				TIM4->CCR3 = 970;
+				TIM4->CCR4 = 970;
 				dir = 0;
 			}
 			else
 			{
-				TIM4->CCR1 = 875;
+				TIM4->CCR1 = 870;
+				TIM4->CCR2 = 870;
+				TIM4->CCR3 = 870;
+				TIM4->CCR4 = 870;
 				dir = 1;
+				krok++;
 			}
 		}
-
+*/
 	}
 	return 0;
 }
 
+void Debug_Intro (void)
+{
+	printf("\033[2J");    // Czyszczenie ekranu
+	printf("\033[00f");  // Ustawienie kursora
+	printf("********************************************************************\n\r");
+	printf("********                  Eltel Sp. z o.o.                  ********\n\r");
+	printf("********          Katowice 40-312 ul.Milowicka 1E           ********\n\r");
+	printf("********             www.eltel.katowice.pl                  ********\n\r");
+	printf("********                  tel. 32-202-78-86                 ********\n\r");
+	printf("********************************************************************\n\r");
+	printf("********             \033[33mPrzeka≈∫nik elektroniczny\033[39m               ********\n\r");
+	printf("********************************************************************\n\r");
+//	printf("********        Data kompilacji:      %14s        ********\n\r", DATE_NOW);
+//	printf("********        Godzina kompilacji:   %14s        ********\n\r", TIME_NOW);
+//	printf("********        Data rewizji:         %14s        ********\n\r", DATE_REV);
+//	printf("********        Godzina rewizji:      %14s        ********\n\r", TIME_REV);
+//	printf("********        Rewizja:              %14d        ********\n\r", REVISION);
+	printf("********        Wersja Pcb:           %14s        ********\n\r", BOARDREV);
+	printf("********************************************************************\n\r");
+}

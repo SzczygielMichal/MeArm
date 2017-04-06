@@ -21,8 +21,8 @@
 #define LEDn				1
 #define LED1_PIN			((uint16_t)0x1000)  /*!< Pin 13 selected port C*/
 #define LED1_GPIO_PORT		GPIOC
-#define LED_ON				GPIOC->ODR |=  (1<<13)
-#define LED_OFF				GPIOC->ODR &= ~(1<<13)
+#define LED_ON				GPIOC->ODR &= ~(1<<13)
+#define LED_OFF				GPIOC->ODR |= (1<<13)
 /**
   * @}
   */

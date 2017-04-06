@@ -5,8 +5,6 @@
 #include "main.h"
 #include "..\StdPeriph_Driver\inc\misc.h"
 
-void Timer_Handler(void);
-
 signed int Timer_ms[eNumberOfTimers];          // 1ms
 
 unsigned int TimerCS;
@@ -82,20 +80,19 @@ void Init_PWMTimer(void) // Timer ms
 
 	TIM4->CCMR1 |= TIM_OCMode_PWM2<<8 | TIM_OCMode_PWM2;
 	TIM4->CCMR2 |= TIM_OCMode_PWM2<<8 | TIM_OCMode_PWM2;
-//	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable<<8 | TIM_OutputState_Enable<<4 | TIM_OutputState_Enable;
-	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable;
+	TIM4->CCER	|= TIM_OutputState_Enable<<12 | TIM_OutputState_Enable<<8 | TIM_OutputState_Enable<<4 | TIM_OutputState_Enable;
 
 //	CCR = 100 - 18ms
-//	CCR = 975 - 0,5ms	- +90 stopni - wartoœc maksymalna w prawo
+//	CCR = 970 - 0,5ms	- +90 stopni - wartoœc maksymalna w prawo
 //	CCR = 950 - 1,0ms	- +45 stopni
 //	CCR = 925 - 1,5ms	- 0 stopni - stan wyjœciowy
 //	CCR = 900 - 2,0ms	- -45 stopni
 //	CCR = 875 - 2,5ms	- -90 stopni - wartoœc maksymalna w lewo
 
-	TIM4->CCR1 = 925;
-	TIM4->CCR2 = 1000;
-	TIM4->CCR3 = 1000;
-	TIM4->CCR4 = 925;
+	TIM4->CCR1 = 922;//870 - 922 - 970 Servo CLAW
+	TIM4->CCR2 = 926;
+	TIM4->CCR3 = 926;
+	TIM4->CCR4 = 870;
 
 	TIM4->CR1 |= TIM_CR1_CEN;
 
@@ -108,6 +105,7 @@ void Init_PWMTimer(void) // Timer ms
 void Timer2_Handler(void)
 {  
 	if(Timer_ms[eTimer_Test] > 0)					Timer_ms[eTimer_Test]--;
+	if(Timer_ms[eTimer_Key] > 0)					Timer_ms[eTimer_Key]--;
 	if(Timer_ms[eTimer_Potentiometer_Check] > 0)	Timer_ms[eTimer_Potentiometer_Check]--;
 	if(Timer_ms[eTimer_Adc] > 0)					Timer_ms[eTimer_Adc]--;
 	if(Timer_ms[eTimer_LED] > 0)					Timer_ms[eTimer_LED]--;

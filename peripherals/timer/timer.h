@@ -19,10 +19,6 @@ enum eTimer		// Timer 1ms
 	eTimer_Servo_3,
 	eTimer_Servo_4,
 	eTimer_AppsTick,
-	eTimer_Servo_1,
-	eTimer_Servo_2,
-	eTimer_Servo_3,
-	eTimer_Servo_4,
 	/*-----------------------------*/
 	eNumberOfTimers
 };
