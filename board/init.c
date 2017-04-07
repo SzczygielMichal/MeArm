@@ -180,20 +180,24 @@ void Init_IO(void)
 //	  9		PB9	-	Nie u¿ywane
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
-//	  10	PB10-	Nie u¿ywane
-//	  11	PB11-	Nie u¿ywane
+//	  10	PB10-	USART3_TX
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE10, GPIO_CRH_MODE10_1);	// USART3_TX Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF10, GPIO_CRH_CNF10_1);		// Alternate function push-pull
+//	  11	PB11-	USART3_RX
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE11, 0); 				// USART_RX Input pin
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF11, GPIO_CRH_CNF11_1);	// Input floating / Input pull-up
 //	  12	PB12-	SPI_NSS	-	LCD
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_NSS Output pin 10MHz
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
-//	  13		PB13	-	SPI_SCK	-	LCD
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
-//	  14		PA14		-	SPI_MISO-	LCD
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE14, 0); 				// SPI2_MISO Input
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
-//	  15		PA15		-	SPI_MOSI-	LCD
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
-	MODIFY_REG(GPIOA->CRH, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE12, GPIO_CRH_MODE12_0); // SP21_NSS Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF12, GPIO_CRH_CNF12_1);	// Alternate function push-pull
+//	  13	PB13	-	SPI_SCK	-	LCD
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE13, GPIO_CRH_MODE13_0); // SPI2_SCK Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF13, GPIO_CRH_CNF13_1);	// Alternate function push-pull
+//	  14	PB14		-	SPI_MISO-	LCD
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE14, 0); 				// SPI2_MISO Input
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF14, GPIO_CRH_CNF14_1);	// 	Input floating / Input pull-up
+//	  15	PB15		-	SPI_MOSI-	LCD
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE15, GPIO_CRH_MODE15_0); // SPI2_MOSI Output pin 10MHz
+	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF15, GPIO_CRH_CNF15_1);	// Alternate function push-pull
 
 //	 PORT-C ----------------------------------------------------------------------------------------------------------
 //	!< GPIO port C clock enable

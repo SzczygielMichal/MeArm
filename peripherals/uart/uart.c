@@ -133,7 +133,12 @@ void USART3_IRQHandler(void)
   {
     CLEAR_BIT(USART3->SR, USART_SR_RXNE);
     Data = USART3->DR;
-    Debug_UART_Rx_Handler((unsigned char)Data);
+
+    //
+    //	Procedura obs³ugi pobieranych danych
+    //  TR_EXT_RxHandler((unsigned char)data);  - z SAGA-EX
+    //
+
   }
 
   NVIC_ClearPendingIRQ(USART3_IRQn);
@@ -159,7 +164,7 @@ void InitUART3(void) // konsola
 
   MODIFY_REG(USART3->CR2, USART_CR2_STOP, USART_CR2_STOP_1);
 
-  // Prêdkoœc 9600
+  // Prêdkoœc 9600 - prawdopodobnie powinno byc 38400
   USART3->BRR = (0x01D4 << 4) + 0x000C;
 
   USART3->SR = 0;
