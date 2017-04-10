@@ -100,12 +100,12 @@ void Debug_Intro (void)
 	printf("\033[2J");    // Czyszczenie ekranu
 	printf("\033[00f");  // Ustawienie kursora
 	printf("********************************************************************\n\r");
-	printf("********                  Eltel Sp. z o.o.                  ********\n\r");
-	printf("********          Katowice 40-312 ul.Milowicka 1E           ********\n\r");
-	printf("********             www.eltel.katowice.pl                  ********\n\r");
-	printf("********                  tel. 32-202-78-86                 ********\n\r");
+	printf("********                                                    ********\n\r");
+	printf("********                 Micha≥ Szczygie≥                   ********\n\r");
+	printf("********                PCB TEST STM32F103                  ********\n\r");
+	printf("********                                                    ********\n\r");
 	printf("********************************************************************\n\r");
-	printf("********             \033[33mPrzeka≈∫nik elektroniczny\033[39m               ********\n\r");
+	printf("********                       \033[33mMeARM\033[39m                        ********\n\r");
 	printf("********************************************************************\n\r");
 //	printf("********        Data kompilacji:      %14s        ********\n\r", DATE_NOW);
 //	printf("********        Godzina kompilacji:   %14s        ********\n\r", TIME_NOW);
