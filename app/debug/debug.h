@@ -8,7 +8,7 @@
 
 
 #define DEBUG_TX_BUFFER_MAX_COUNT   2000 //1152 - zmienione ze względu na wywietlanie słów kluczowych w konsoli
-#define DEBUG_RX_BUFFER_MAX_COUNT   24  
+#define DEBUG_RX_BUFFER_MAX_COUNT   40
 
 
 #define TextGreen     printf("\033[32m")

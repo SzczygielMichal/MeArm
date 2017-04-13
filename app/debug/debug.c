@@ -239,7 +239,7 @@ unsigned char ServoSetup(unsigned char *string)
 	      return F_RESULT_OK;
 	      break;
 	    case 3:
-	      if( strchr(string,'l') ){ TIM4->CCR1 = 970;}
+	      if( strchr(string,(unsigned char)'l') ){ TIM4->CCR1 = 970;}
 	      if( strchr(string,'p') ){ TIM4->CCR1 = 870;}
 
 	      ConsoleClear();
@@ -448,10 +448,14 @@ unsigned char LoginToConsole_CheckPassword(unsigned char *string)
 
 void Console_Handler(void)
 {
-  unsigned char str[20];
+  unsigned char str[40];
+  char test_str[40];
+  char argument[5][40];
   unsigned char i,j;
   unsigned char temp;
+  unsigned char temp_m;
   
+
   switch(Debug.RxBuffer[Debug.RxCounter-1])
   {
 //    case 'S': Debug.RxCounter = 0;  SetupPrint(NULL); break;
@@ -483,6 +487,29 @@ void Console_Handler(void)
         		str[j++] = Debug.RxBuffer[i];
         }
         str[j] = 0;
+
+//
+//	Dodane przeze mnie do testowania parametrów podczas podawania komend przez konsolê
+//
+        i = 0;
+        j = 0;
+        temp_m = 0;
+        while(Debug.RxBuffer[i] != '\r')
+        {
+        	if(Debug.RxBuffer[i] == ' ')
+        	{
+        		strncpy(test_str, (char)&(Debug.RxBuffer[i]), i-temp_m);
+        		strncpy((char)argument[j][0], (char)(&(Debug.RxBuffer[i])), i-temp_m);
+        		temp_m = i;
+        		j++;
+        	}
+        	i++;
+        }
+
+//
+//	Koniec dodane przeze mnie do testowania parametrów podczas podawania komend przez konsolê
+//
+
         Debug.RxCounter = 0;
     
         switch(ConsoleCtrl.CommandCode)
