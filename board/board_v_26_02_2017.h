@@ -27,14 +27,22 @@
   * @}
   */
 
-/** @addtogroup TIME
+/** @addtogroup LED1
   * @{
   */
-//#define TIMEn				11
-//#define TIME_PIN			((uint16_t)0x0800)  /*!< Pin 11 selected port B*/
-//#define TIME_GPIO_PORT	GPIOB
-//#define TIME_ON			GPIOB->ODR |=  (1<<11)
-//#define TIME_OFF			GPIOB->ODR &= ~(1<<11)
+//#define BLUE_EN				((uint16_t)0x1000)  /*!< Pin 13 selected port C*/
+#define BLUE_EN_GPIO_PORT		GPIOB
+#define BLUE_EN_ON				GPIOB->ODR &= ~(1<<0)
+#define BLUE_EN_OFF				GPIOB->ODR |= (1<<0)
+/**
+  * @}
+  */
+
+/** @addtogroup LED1
+  * @{
+  */
+//#define BLUE_EN				((uint16_t)0x1000)  /*!< Pin 13 selected port C*/
+#define BLUE_STATE				GPIOB->IDR & 0x0002
 /**
   * @}
   */

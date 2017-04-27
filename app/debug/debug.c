@@ -136,6 +136,7 @@ const struct sConsoleMenu
 };
 
 #define COMMAND_CODE_LOGIN_TO_CONSOLE 1
+#define COMMAND_CODE_NOT_LOGIN_TO_CONSOLE 0
 #define COMMAND_CODE_HELP 4 
 
 struct sConsoleCtrl
@@ -498,7 +499,7 @@ void Console_Handler(void)
         {
         	if(Debug.RxBuffer[i] == ' ')
         	{
-        		strncpy(test_str, (char)&(Debug.RxBuffer[i]), i-temp_m);
+        		strncpy(test_str, (char)&(Debug.RxBuffer[temp_m]), i-temp_m);
         		strncpy((char)argument[j][0], (char)(&(Debug.RxBuffer[i])), i-temp_m);
         		temp_m = i;
         		j++;
@@ -575,8 +576,8 @@ unsigned char Debug_SendData(unsigned char *Data, unsigned char DataCount)
 
 void Init_Debug(void)
 {
-	ConsoleCtrl.CommandCode = COMMAND_CODE_LOGIN_TO_CONSOLE; // - wyłączyłem logowanie do konsoli - należy tą opcję włączyć
-//	ConsoleCtrl.CommandCode = 0;
+//	ConsoleCtrl.CommandCode = COMMAND_CODE_LOGIN_TO_CONSOLE; 		// w��czenie logowania z konsoli
+	ConsoleCtrl.CommandCode = COMMAND_CODE_NOT_LOGIN_TO_CONSOLE;	// wy��czenie logowania z konsoli
 	ConsoleCtrl.Step = 0;
 }
 

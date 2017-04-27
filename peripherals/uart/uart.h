@@ -84,5 +84,14 @@
   void InitUART1(void);
   void SendUART1(void *Buffer, unsigned short Count);
   void USART1_IRQHandler(void);
+
+  void InitUART3(void);
+  void SendUART1(void *Buffer, unsigned short Count);
+  void USART3_IRQHandler(void);
   
+  void Init_USART3_RCC();
+  void Init_USART3_GPIO();
+  void Init_USART3_Interrupt();
+  void Init_USART3(int baud);
+
 #endif

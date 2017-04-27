@@ -20,45 +20,7 @@ unsigned int TimerCS;
 /** 
  *  \brief Init Timer 1ms
  */
-void Init_Timer2(void)
-{
-  unsigned char i;
 
-  NVIC_InitTypeDef NVICC;
-  
-  /*!< @ref IRQn_Type IRQ Channels list, please refer to stm32l1xx.h line:212*/
-  NVICC.NVIC_IRQChannel = TIM2_IRQn;
-
-  /*!< Specifies the pre-emption  priority for the IRQ channel
-  specified in NVIC_IRQChannel. This parameter can be a value
-  between 0 and 15 as described in the table @ref NVIC_Priority_Table */
-  NVICC.NVIC_IRQChannelPreemptionPriority = 1;  
-
-  /*!< Specifies the subpriority level for the IRQ channel specified
-  in NVIC_IRQChannel. This parameter can be a value
-  between 0 and 15 as described in the table @ref NVIC_Priority_Table */
-  NVICC.NVIC_IRQChannelSubPriority = 0;         
-
-  /*!< Specifies whether the IRQ channel defined in NVIC_IRQChannel This parameter can be set either to ENABLE or DISABLE */   
-  NVICC.NVIC_IRQChannelCmd = ENABLE; 
-
-  NVIC_Init(&NVICC);
-
-  NVIC_ClearPendingIRQ(TIM2_IRQn );
-  NVIC_EnableIRQ(TIM2_IRQn);
-
-  /* Enable TIM2 clocks */
-  SET_BIT(RCC->APB1ENR , RCC_APB1ENR_TIM2EN); // wlacz zegar dla timera 1ms
-
-  WRITE_REG(TIM2->CNT, 0x0000);
-  WRITE_REG(TIM2->ARR, 0x8CA0);		// Nale¿y wpisac wartoœc potrzebn¹ do uzyskania czasu 1ms -NIE DZIA£A DLA Fck = 72MHZ
-  WRITE_REG(TIM2->PSC, 0x0001);		//(Value + 1) = 2 - prescaler
-
-  SET_BIT(TIM2->DIER, TIM_DIER_UIE);         // wlacz przerwanie przepelnienia licznika
-  SET_BIT(TIM2->CR1,  TIM_CR1_CEN);          // wlacz timer; bit DIR domyslnie 0 zliczanie w gore
-
-  for(i = 0; i < eNumberOfTimers; i++) Timer_ms[i] = TIMER_OFF;
-}
 
 /** 
  *  \brief Init Timer for PWM
@@ -92,11 +54,51 @@ void Init_PWMTimer(void) // Timer ms
 	TIM4->CCR1 = 922;//870 - 922 - 970 Servo CLAW
 	TIM4->CCR2 = 926;
 	TIM4->CCR3 = 926;
-	TIM4->CCR4 = 870;
+	TIM4->CCR4 = 926;
 
 	TIM4->CR1 |= TIM_CR1_CEN;
 
 	RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+}
+
+void Init_Timer2(void)
+{
+  unsigned char i;
+
+  NVIC_InitTypeDef NVICC;
+
+  /*!< @ref IRQn_Type IRQ Channels list, please refer to stm32l1xx.h line:212*/
+  NVICC.NVIC_IRQChannel = TIM2_IRQn;
+
+  /*!< Specifies the pre-emption  priority for the IRQ channel
+  specified in NVIC_IRQChannel. This parameter can be a value
+  between 0 and 15 as described in the table @ref NVIC_Priority_Table */
+  NVICC.NVIC_IRQChannelPreemptionPriority = 1;
+
+  /*!< Specifies the subpriority level for the IRQ channel specified
+  in NVIC_IRQChannel. This parameter can be a value
+  between 0 and 15 as described in the table @ref NVIC_Priority_Table */
+  NVICC.NVIC_IRQChannelSubPriority = 0;
+
+  /*!< Specifies whether the IRQ channel defined in NVIC_IRQChannel This parameter can be set either to ENABLE or DISABLE */
+  NVICC.NVIC_IRQChannelCmd = ENABLE;
+
+  NVIC_Init(&NVICC);
+
+  NVIC_ClearPendingIRQ(TIM2_IRQn );
+  NVIC_EnableIRQ(TIM2_IRQn);
+
+  /* Enable TIM2 clocks */
+  SET_BIT(RCC->APB1ENR , RCC_APB1ENR_TIM2EN); // wlacz zegar dla timera 1ms
+
+  WRITE_REG(TIM2->CNT, 0x0000);
+  WRITE_REG(TIM2->ARR, 0x8CA0);		// Nale¿y wpisac wartoœc potrzebn¹ do uzyskania czasu 1ms -NIE DZIA£A DLA Fck = 72MHZ
+  WRITE_REG(TIM2->PSC, 0x0001);		//(Value + 1) = 2 - prescaler
+
+  SET_BIT(TIM2->DIER, TIM_DIER_UIE);         // wlacz przerwanie przepelnienia licznika
+  SET_BIT(TIM2->CR1,  TIM_CR1_CEN);          // wlacz timer; bit DIR domyslnie 0 zliczanie w gore
+
+  for(i = 0; i < eNumberOfTimers; i++) Timer_ms[i] = TIMER_OFF;
 }
 
 /** 

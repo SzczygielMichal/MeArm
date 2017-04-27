@@ -4,7 +4,7 @@
 void Init_IWDG(void)
 {
   IWDG_WriteAccessCmd(IWDG_WriteAccess_Enable);
-  IWDG_SetPrescaler(IWDG_Prescaler_16);
+  IWDG_SetPrescaler(IWDG_Prescaler_32);
   IWDG_SetReload(0xFFF);
   IWDG_ReloadCounter();
   IWDG_Enable();

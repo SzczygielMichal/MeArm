@@ -19,5 +19,8 @@ void Led_Trig(void)
 			LED_ON;
 			x = 0;
 		}
+		while (!(USART3->SR & USART_SR_TC));
+			USART3->DR = 'M';
+
 	}
 }

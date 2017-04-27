@@ -99,11 +99,6 @@ void Init_RCC(void)
 	MODIFY_REG(RCC->CFGR, RCC_CFGR_PPRE2, RCC_CFGR_PPRE2_DIV1);   // APB2 /1  magistrala peryferi占퐓 PCLK2 = 32MHz
 }
 
-#if defined ( MEARM_BOARD_V_26_02_2017_H)
-
-//
-// \brief Platform Board 26.02.2017
-//
 void Init_IO(void)
 {
 //	PORT u퓓te w projekcie
@@ -160,24 +155,26 @@ void Init_IO(void)
 	SET_BIT(RCC->APB2ENR, RCC_APB2ENR_IOPBEN);
 
 //	CRL
-//	  0   	PB0	-	Nie u퓓wane
-//	  1		PB1	-	Nie u퓓wane
+//	  0   	PB0	-	Bluetooth Enable
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE0, GPIO_CRL_MODE0_0); // Output pin 10MHz
+//	  1		PB1	-	Bluetooth State
+	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE1, 0); // Input pin 10MHz
 //    2		PB2	-	Nie u퓓wane
 //	  3		PB3	-	Nie u퓓wane
 //	  4		PB4	-	Nie u퓓wane
 //	  5		PB5	-	Nie u퓓wane
-//	  6		PB6	-	Nie u퓓wane
+//	  6		PB6	-	PWM
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE6, GPIO_CRL_MODE6_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF6, GPIO_CRL_CNF6_1);	// Alternate function push-pull
-//	  7		PB7	-	Nie u퓓wane
+//	  7		PB7	-	PWM
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_MODE7, GPIO_CRL_MODE7_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRL, GPIO_CRL_CNF7, GPIO_CRL_CNF7_1);	// Alternate function push-pull
 
 	//	CRH
-//	  8		PB8	-	Nie u퓓wane
+//	  8		PB8	-	PWM
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE8, GPIO_CRH_MODE8_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF8, GPIO_CRH_CNF8_1);	// Alternate function push-pull
-//	  9		PB9	-	Nie u퓓wane
+//	  9		PB9	-	PWM
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_MODE9, GPIO_CRH_MODE9_0); // PWM Output pin 10MHz
 	MODIFY_REG(GPIOB->CRH, GPIO_CRH_CNF9, GPIO_CRH_CNF9_1);	// Alternate function push-pull
 //	  10	PB10-	USART3_TX
@@ -210,9 +207,8 @@ void Init_IO(void)
 //	 15		PC15		-	Nie u퓓wane
 
 //     END GPIO ----------------------------------------------------------------------------------------------------------
-
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
 }
-#endif // Board
 
 void Init_Peripherals(void)
 {
@@ -221,6 +217,7 @@ void Init_Peripherals(void)
 	Init_Timer2();      // 1ms
 	Init_PWMTimer();	// Generowanie sygna퀅 PWM na wyj쐁iach B0, B1, B4, B5
 	InitUART1();        // Konsolka
+	InitUART3();        // Konsolka
 	Init_IWDG();		// WatchDog
 //	Init_ADC();
 	InitEXTI();

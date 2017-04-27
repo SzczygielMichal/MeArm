@@ -39,6 +39,7 @@ char buffer[100];
 unsigned int x = 1000;
 char op = 0;
 char dir = 0;
+char stan;
 unsigned int krok;
 unsigned int we;
 unsigned char wynik;
@@ -56,20 +57,25 @@ int main(void)
 	Init_IO();
 	Init_Peripherals();
 
-//	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
-	TimerStart(eTimer_Key, 500);			// Miganie LED6 co 1s
+	TimerStart(eTimer_LED, 10);			// Miganie LED6 co 1s
+	TimerStart(eTimer_Servo_1, 500);			// Miganie LED6 co 1s
 
 	Init_Debug();
 	Debug_Intro();
 
+	Init_USART3_RCC();
+	Init_USART3_GPIO();
+	Init_USART3_Interrupt();
+	Init_USART3(9600);
+
 	while(1)
 	{
 		IWDG_Reset();						// Waruj - reset watchdoga
-//	    Led_Trig();
+	    Led_Trig();
 	    Debug_Handler();					// Obsluga konsoli debugowania
 //	    Potentiometer_Handler();			// Odczyt nastaw potencjometrów
 
-/*		if(TimerStatus(eTimer_Servo_1) == TIMER_END)
+		if(TimerStatus(eTimer_Servo_1) == TIMER_END)
 		{
 			TimerStart(eTimer_Servo_1, 1000); // Timer 100ms
 			if(dir)
@@ -90,7 +96,7 @@ int main(void)
 				krok++;
 			}
 		}
-*/
+	    stan = BLUE_STATE;
 	}
 	return 0;
 }
